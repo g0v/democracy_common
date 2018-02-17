@@ -1,0 +1,8 @@
+# This is a PIP requirements file for building Sphinx documentation of pywikibot
+# using sphinx on python3.4.
+# requests-requirements.txt is also needed
+
+sphinx
+sphinx-epytext>=0.0.4
+numpydoc
+
