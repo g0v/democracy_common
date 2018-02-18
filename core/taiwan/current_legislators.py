@@ -27,17 +27,21 @@ def get_qnumber(wikiarticle, lang, limit=1):
 conn = db_settings.con_ly()
 c = conn.cursor()
 
-overwrite = True
+overwrite = False
+refs = {
+    '男': 'Q6581097',
+    '女': 'Q6581072'
+}
 
 c.execute('''
     select row_to_json(_)
     from (
-        select l.*, c.district, c.gender, lm.identifiers, cm.birth
+        select l.*, c.district, c.gender, lm.identifiers, cm.birth, jsonb_array_length(identifiers) as names_count
         from legislator_legislatordetail l
         left join candidates_terms c on c.legislator_id = l.id
         left join candidates_candidates cm on c.candidate_id = cm.uid
         left join legislator_legislator lm on l.legislator_id = lm.uid
-        where l.ad = 9 and l.name = '趙天麟'
+        where l.ad = 9
     ) _
 ''')
 for r in c.fetchall()[:]:
@@ -54,14 +58,15 @@ for r in c.fetchall()[:]:
             site = pywikibot.Site("wikidata", "wikidata")
             repo = site.data_repository()
             name_q = get_qnumber(wikiarticle=name, lang="zh-tw")
-            item = pywikibot.ItemPage(site, name_q)
             try:
+                item = pywikibot.ItemPage(site, name_q)
                 item.get()
-            except pywikibot.exceptions.NoPage:
+            except:
                 continue
             labels = {'zh-tw': name, 'zh': name}
             item.editLabels(labels, asynchronous=False)
             break
+
     # Q4167410 維基媒體消歧義頁
     if item.claims['P31'][0].target.id == 'Q4167410':
         try:
@@ -81,6 +86,46 @@ for r in c.fetchall()[:]:
             if item.claims.get('P102') and item.claims['P102'][0].target.id == party:
                 break
     print(item)
+
+    # Aliase
+    if not item.labels.get('zh-tw'):
+        labels = {'zh-tw': person['name']}
+        item.editLabels(labels, asynchronous=False)
+    if person['names_count'] > 1:
+        aliases = {'zh-tw': person['identifiers'], 'zh': person['identifiers']}
+        item.editAliases(aliases, asynchronous=False)
+
+    # Q82955 政治人物
+    try:
+        if 'Q82955' not in [x.target.id for x in item.claims['P106']]:
+            raise
+    except:
+        claim = pywikibot.Claim(repo, 'P106')
+        target = pywikibot.ItemPage(repo, 'Q82955')
+        claim.setTarget(target)
+        item.addClaim(claim)
+
+    # 性別
+    try:
+        item.claims['P21']
+    except:
+        claim = pywikibot.Claim(repo, 'P21')
+        target = pywikibot.ItemPage(repo, refs[person['gender']])
+        claim.setTarget(target)
+        item.addClaim(claim)
+
+    # 生日
+    b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
+    b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
+    try:
+        if b_target != item.claims['P569'][0].target:
+            claim = item.claims['P569'][0]
+            claim.setTarget(b_target)
+            item.addClaim(claim)
+    except:
+        claim = pywikibot.Claim(repo, 'P569')
+        claim.setTarget(b_target)
+        item.addClaim(claim)
 
     # Q6310593 立法委員
     try:
