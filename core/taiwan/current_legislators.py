@@ -211,7 +211,6 @@ for r in c.fetchall()[:]:
         claim.addQualifier(qualifier)
         time.sleep(10)
 
-#   time.sleep(3)
     if person['county'] != '全國不分區':
         wikidata_site = pywikibot.Site("wikidata", "wikidata")
         repo = wikidata_site.data_repository()
