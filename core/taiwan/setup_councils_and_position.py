@@ -57,7 +57,6 @@ maps = {
 def create_item(site, label_dict):
     new_item = pywikibot.ItemPage(site)
     new_item.editLabels(labels=label_dict)
-    # Add description here or in another function
     return new_item.getID()
 
 c.execute('''
@@ -71,13 +70,88 @@ c.execute('''
 ''')
 
 site = pywikibot.Site("zh", "wikipedia")
+wikidata_site = pywikibot.Site("wikidata", "wikidata")
 repo = site.data_repository()
-for row in c.fetchall()[18:]:
+for row in c.fetchall():
     r = row[0]
+    print(r['county'])
     council_name = '%s議會' % r['county']
     page = pywikibot.Page(site, council_name)
     item = pywikibot.ItemPage.fromPage(page)
-    print(r['county'], item.id)
+    print(council_name, item.id)
+    county_page = pywikibot.Page(site, r['county'])
+    try:
+        county_target = pywikibot.ItemPage.fromPage(county_page)
+    except:
+        county_q = get_qnumber(wikiarticle=r['county'], lang="zh-tw")
+        county_target = pywikibot.ItemPage(wikidata_site, county_q)
+
+    # councilor position
+
+    position = '%s議員' % r['county']
+    try:
+        match = False
+        for q_id in get_qnumber(wikiarticle=position, lang="zh-tw", limit=None):
+            position_item = pywikibot.ItemPage(repo, q_id)
+            position_item.get()
+            if position_item.claims.get('P31') and 'Q4164871' in [x.target.id for x in position_item.claims['P31']]: # Q4164871 職位
+                match = True
+                break
+        if not match:
+            raise
+    except:
+        position_labels = {"zh": position, "zh-tw": position}
+        position_item_id = create_item(wikidata_site, position_labels)
+        position_item = pywikibot.ItemPage(repo, position_item_id)
+        position_item.get()
+        print('new position page created.')
+    print(position, position_item.id)
+
+    # 性質
+    try:
+        if 'Q4164871' not in [x.target.id for x in position_item.claims['P31']]:
+            raise
+    except:
+        claim = pywikibot.Claim(repo, 'P31')
+        target = pywikibot.ItemPage(repo, 'Q4164871') # Q4164871 職位
+        claim.setTarget(target)
+        position_item.addClaim(claim)
+
+    # 上級分類
+    try:
+        position_item.claims['P279']
+    except:
+        claim = pywikibot.Claim(repo, 'P279')
+        target = pywikibot.ItemPage(repo, 'Q708492') # Q708492 縣市議員
+        claim.setTarget(target)
+        position_item.addClaim(claim)
+
+    # 屬於
+    try:
+        position_item.claims['P361']
+    except:
+        claim = pywikibot.Claim(repo, 'P361')
+        claim.setTarget(item)
+        position_item.addClaim(claim)
+
+    # 國家
+    try:
+        position_item.claims['P17']
+    except:
+        claim = pywikibot.Claim(repo, 'P17')
+        target = pywikibot.ItemPage(repo, 'Q865') # Q865 中華民國
+        claim.setTarget(target)
+        position_item.addClaim(claim)
+
+    # 管轄區域
+    try:
+        position_item.claims['P1001']
+    except:
+        claim = pywikibot.Claim(repo, 'P1001')
+        claim.setTarget(county_target)
+        position_item.addClaim(claim)
+
+    # council
 
     if not item.labels.get('zh-tw'):
         labels = {'zh-tw': council_name}
@@ -87,6 +161,8 @@ for row in c.fetchall()[18:]:
     try:
         if 'Q3308596' not in [x.target.id for x in item.claims['P31']]:
             raise
+        if not overwrite:
+            continue
     except:
         claim = pywikibot.Claim(repo, 'P31')
         target = pywikibot.ItemPage(repo, 'Q3308596') # Q3308596 市長－議會制
@@ -106,15 +182,8 @@ for row in c.fetchall()[18:]:
     try:
         item.claims['P1001']
     except:
-        county_page = pywikibot.Page(site, r['county'])
-        try:
-            target = pywikibot.ItemPage.fromPage(county_page)
-        except:
-            wikidata_site = pywikibot.Site("wikidata", "wikidata")
-            county_q = get_qnumber(wikiarticle=r['county'], lang="zh-tw")
-            target = pywikibot.ItemPage(wikidata_site, county_q)
         claim = pywikibot.Claim(repo, 'P1001')
-        claim.setTarget(target)
+        claim.setTarget(county_target)
         item.addClaim(claim)
 
     # 席次
@@ -135,6 +204,14 @@ for row in c.fetchall()[18:]:
         claim.setTarget(target)
         item.addClaim(claim)
 
+    # 子類
+    try:
+        item.claims['P527']
+    except:
+        claim = pywikibot.Claim(repo, 'P527')
+        claim.setTarget(position_item)
+        item.addClaim(claim)
+
     # 官方網站
     try:
         item.claims['P856']
@@ -142,7 +219,3 @@ for row in c.fetchall()[18:]:
         claim = pywikibot.Claim(repo, 'P856')
         claim.setTarget(maps[r['county']])
         item.addClaim(claim)
-
-#   some_labels = {"zh": "新北市議員", "zh-tw": "新北市議員"}
-#   new_item_id = create_item(site, some_labels)
-#   print(new_item_id)
