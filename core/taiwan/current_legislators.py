@@ -1,37 +1,36 @@
 #!/usr/bin/python3
 import time
-from datetime import datetime
-from requests import get
 import pywikibot
 
-from common import db_settings
+from common import db_settings, utils
 
-
-def get_qnumber(wikiarticle, lang, limit=1):
-    params={
-        'action': 'wbsearchentities',
-        'search': wikiarticle,
-        'language': lang,
-        'uselang': lang,
-        'format': 'json',
-        'type': 'item'
-    }
-    if limit:
-        params['limit'] = limit
-    resp = get('https://www.wikidata.org/w/api.php', params=params).json()
-    if resp.get('search') and limit:
-        return resp['search'][0]['id']
-    else:
-        return [x['id'] for x in resp['search']]
 
 conn = db_settings.con_ly()
 c = conn.cursor()
 
 overwrite = False
+sleep_second = 5
 refs = {
     '男': 'Q6581097',
     '女': 'Q6581072'
 }
+ad = 9
+election_years = [1989, 1992, 1995, 1998, 2001, 2004, 2008, 2012, 2016, 2020]
+election_title = '%d年立法委員選舉' % election_years[ad-1]
+
+def person_from_db(name):
+    c.execute('''
+        select row_to_json(_)
+        from (
+            select l.*, c.district, c.gender, lm.identifiers, cm.birth, jsonb_array_length(identifiers) as names_count
+            from legislator_legislatordetail l
+            left join candidates_terms c on c.legislator_id = l.id
+            left join candidates_candidates cm on c.candidate_id = cm.uid
+            left join legislator_legislator lm on l.legislator_id = lm.uid
+            where l.ad = %s and l.name = %s
+        ) _
+    ''', [ad, name])
+    return c.fetchone()[0]
 
 c.execute('''
     select row_to_json(_)
@@ -41,57 +40,26 @@ c.execute('''
         left join candidates_terms c on c.legislator_id = l.id
         left join candidates_candidates cm on c.candidate_id = cm.uid
         left join legislator_legislator lm on l.legislator_id = lm.uid
-        where l.ad = 9
+        where l.ad = %s
     ) _
-''')
-for r in c.fetchall()[:]:
+''', [ad, ])
+for r in c.fetchall():
     person = r[0]
     site = pywikibot.Site("zh", "wikipedia")
     repo = site.data_repository()
-    for name in person['identifiers']:
-        print(name)
-        try:
-            page = pywikibot.Page(site, name)
-            item = pywikibot.ItemPage.fromPage(page)
-            break
-        except:
-            site = pywikibot.Site("wikidata", "wikidata")
-            repo = site.data_repository()
-            name_q = get_qnumber(wikiarticle=name, lang="zh-tw")
-            try:
-                item = pywikibot.ItemPage(site, name_q)
-                item.get()
-            except:
-                continue
-            labels = {'zh-tw': name, 'zh': name}
-            item.editLabels(labels, asynchronous=False)
-            break
-
-    # Q4167410 維基媒體消歧義頁
-    if item.claims['P31'][0].target.id == 'Q4167410':
-        try:
-            item.removeClaims(item.claims['P39'][0])
-        except:
-            pass
-        site = pywikibot.Site("wikidata", "wikidata")
-        repo = site.data_repository()
-        party = get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
-        b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
-        b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
-        for q_id in get_qnumber(wikiarticle=person['name'], lang="zh-tw", limit=None):
-            item = pywikibot.ItemPage(site, q_id)
-            item.get()
-            if item.claims.get('P569') and item.claims['P569'][0].target == b_target:
-                break
-            if item.claims.get('P102') and item.claims['P102'][0].target.id == party:
-                break
+    item = utils.person_page_item(person)
+    item.get()
     print(item)
 
-    # Aliase
+    # Q6310593 立法委員
+    claim = item.claims['P39'][0]
+    continue
+
+    # Labels & Aliase
     if not item.labels.get('zh-tw'):
         labels = {'zh-tw': person['name']}
         item.editLabels(labels, asynchronous=False)
-    if person['names_count'] > 1:
+    if person['names_count'] > 1 and not item.aliases.get('zh-tw'):
         aliases = {'zh-tw': person['identifiers'], 'zh': person['identifiers']}
         item.editAliases(aliases, asynchronous=False)
 
@@ -149,7 +117,18 @@ for r in c.fetchall()[:]:
         target = pywikibot.WbTime(year=year, month=month, day=day, precision='day')
         qualifier.setTarget(target)
         claim.addQualifier(qualifier)
-        time.sleep(10)
+        time.sleep(sleep_second)
+
+    # 選舉於
+    try:
+        qualifier = claim.qualifiers['P2715']
+    except:
+        qualifier = pywikibot.Claim(repo, 'P2715')
+        election = utils.get_qnumber(wikiarticle=election_title, lang="zh-tw")
+        target = pywikibot.ItemPage(repo, election)
+        qualifier.setTarget(target)
+        claim.addQualifier(qualifier)
+        time.sleep(sleep_second)
 
     if person['in_office'] == False and person['term_end']:
         # end at
@@ -161,46 +140,68 @@ for r in c.fetchall()[:]:
             target = pywikibot.WbTime(year=year, month=month, day=day, precision='day')
             qualifier.setTarget(target)
             claim.addQualifier(qualifier)
-            time.sleep(10)
+            time.sleep(sleep_second)
+        # replaced by
+        print('replaced by: %s' % person['term_end']['replacement'])
+        target = utils.person_page_item(person_from_db(person['term_end']['replacement']))
+        try:
+            qualifier = claim.qualifiers['P1366']
+        except:
+            qualifier = pywikibot.Claim(repo, 'P1366')
+            qualifier.setTarget(target)
+            claim.addQualifier(qualifier)
+            time.sleep(sleep_second)
+        # replaces
+        try:
+            claim = target.claims['P39'][0]
+            try:
+                qualifier = claim.qualifiers['P1365']
+            except:
+                qualifier = pywikibot.Claim(repo, 'P1365')
+                qualifier.setTarget(item)
+                claim.addQualifier(qualifier)
+                time.sleep(sleep_second)
+        except:
+            pass
 
     # party
     try:
         qualifier = claim.qualifiers['P4100']
     except:
         qualifier = pywikibot.Claim(repo, 'P4100')
-        party = get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
+        party = utils.get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
         target = pywikibot.ItemPage(repo, party)
         qualifier.setTarget(target)
         claim.addQualifier(qualifier)
-        time.sleep(10)
+        time.sleep(sleep_second)
 
     # terms
     try:
         qualifier = claim.qualifiers['P2937']
     except:
         qualifier = pywikibot.Claim(repo, 'P2937')
-        term = get_qnumber(wikiarticle="第%d屆立法委員" % person['ad'], lang="zh-tw")
+        term = utils.get_qnumber(wikiarticle="第%d屆立法委員" % person['ad'], lang="zh-tw")
         target = pywikibot.ItemPage(repo, term)
         qualifier.setTarget(target)
         claim.addQualifier(qualifier)
-        time.sleep(10)
+        time.sleep(sleep_second)
 
     # constituency
     if person['county'] == '全國不分區':
         constituency_label = person['county']
         aliase = constituency_label
-        constituency = get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
+        constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
     else:
         ref = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九']
         constituency_label = "%s第%s選舉區" % (person['county'], ref[person['constituency']-1])
         aliase = "%s第%d選舉區" % (person['county'], person['constituency'])
-        constituency = get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
+        constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
         if not constituency and person['county'] == '桃園市':
-            constituency = get_qnumber(wikiarticle="桃園縣第%s選舉區" % (ref[person['constituency']-1]), lang="zh-tw")
+            constituency = utils.get_qnumber(wikiarticle="桃園縣第%s選舉區" % (ref[person['constituency']-1]), lang="zh-tw")
         elif not constituency and person['constituency'] == 1:
             constituency_label = "%s選舉區" % (person['county'])
             aliase = constituency_label
-            constituency = get_qnumber(constituency_label, lang="zh-tw")
+            constituency = utils.get_qnumber(constituency_label, lang="zh-tw")
     try:
         qualifier = claim.qualifiers['P768']
     except:
@@ -209,7 +210,7 @@ for r in c.fetchall()[:]:
         target = pywikibot.ItemPage(repo, constituency)
         qualifier.setTarget(target)
         claim.addQualifier(qualifier)
-        time.sleep(10)
+        time.sleep(sleep_second)
 
     if person['county'] != '全國不分區':
         wikidata_site = pywikibot.Site("wikidata", "wikidata")
