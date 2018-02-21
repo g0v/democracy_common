@@ -1,28 +1,9 @@
 #!/usr/bin/python3
 import time
-from datetime import datetime
-from requests import get
 import pywikibot
 
-from common import db_settings
+from common import db_settings, utils
 
-
-def get_qnumber(wikiarticle, lang, limit=1):
-    params={
-        'action': 'wbsearchentities',
-        'search': wikiarticle,
-        'language': lang,
-        'uselang': lang,
-        'format': 'json',
-        'type': 'item'
-    }
-    if limit:
-        params['limit'] = limit
-    resp = get('https://www.wikidata.org/w/api.php', params=params).json()
-    if resp.get('search') and limit:
-        return resp['search'][0]['id']
-    else:
-        return [x['id'] for x in resp['search']]
 
 conn = db_settings.con_councilor()
 c = conn.cursor()
@@ -83,7 +64,7 @@ for row in c.fetchall():
     try:
         county_target = pywikibot.ItemPage.fromPage(county_page)
     except:
-        county_q = get_qnumber(wikiarticle=r['county'], lang="zh-tw")
+        county_q = utils.get_qnumber(wikiarticle=r['county'], lang="zh-tw")
         county_target = pywikibot.ItemPage(wikidata_site, county_q)
 
     # councilor position
@@ -91,7 +72,7 @@ for row in c.fetchall():
     position = '%s議員' % r['county']
     try:
         match = False
-        for q_id in get_qnumber(wikiarticle=position, lang="zh-tw", limit=None):
+        for q_id in utils.get_qnumber(wikiarticle=position, lang="zh-tw", limit=None):
             position_item = pywikibot.ItemPage(repo, q_id)
             position_item.get()
             if position_item.claims.get('P31') and 'Q4164871' in [x.target.id for x in position_item.claims['P31']]: # Q4164871 職位

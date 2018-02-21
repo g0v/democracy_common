@@ -43,10 +43,10 @@ c.execute('''
         where l.ad = %s
     ) _
 ''', [ad, ])
+site = pywikibot.Site("zh", "wikipedia")
+repo = site.data_repository()
 for r in c.fetchall():
     person = r[0]
-    site = pywikibot.Site("zh", "wikipedia")
-    repo = site.data_repository()
     item = utils.person_page_item(person)
     item.get()
     print(item)
