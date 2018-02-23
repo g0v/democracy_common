@@ -25,7 +25,7 @@ c.execute('''
 site = pywikibot.Site("zh", "wikipedia")
 wikidata_site = pywikibot.Site("wikidata", "wikidata")
 repo = site.data_repository()
-for row in c.fetchall()[189:]:
+for row in c.fetchall():
     r = row[0]
     print(r['county'])
     try:
