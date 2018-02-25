@@ -136,11 +136,13 @@ for i, r in enumerate(c.fetchall()):
     term_start_target = pywikibot.WbTime(year=term_start_year, month=term_start_month, day=term_start_day, precision='day')
     # XX縣市議員
     try:
-        item.claims['P39']
-        if not overwrite:
-            continue
-        claim = item.claims['P39'][0]
-        if term_start_target not in [x.qualifiers['P580'][0].target for x in item.claims['P39']]:
+        match = False
+        for i, x in enumerate(item.claims['P39']):
+            if term_start_target == x.qualifiers['P580'][0].target:
+                claim = item.claims['P39'][i]
+                match = True
+                break
+        if not match:
             raise
     except:
         claim = pywikibot.Claim(repo, 'P39')
