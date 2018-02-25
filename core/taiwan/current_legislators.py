@@ -17,6 +17,7 @@ refs = {
 ad = 9
 election_years = [1989, 1992, 1995, 1998, 2001, 2004, 2008, 2012, 2016, 2020]
 election_title = '%d年立法委員選舉' % election_years[ad-1]
+ref = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九']
 
 def person_from_db(name):
     c.execute('''
@@ -105,8 +106,7 @@ for r in c.fetchall():
         target = pywikibot.ItemPage(repo, "Q6310593")
         claim.setTarget(target)
         item.addClaim(claim)
-    finally:
-        claim = item.claims['P39'][0]
+    claim = item.claims['P39'][0]
 
     # start at
     try:
@@ -192,7 +192,6 @@ for r in c.fetchall():
         aliase = constituency_label
         constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
     else:
-        ref = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九']
         constituency_label = "%s第%s選舉區" % (person['county'], ref[person['constituency']-1])
         aliase = "%s第%d選舉區" % (person['county'], person['constituency'])
         constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")

@@ -79,7 +79,10 @@ def person_page_item(person):
                 item.removeClaims(item.claims['P39'][0])
             except:
                 pass
-            party = get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
+            if 'name' in person['party'][0]:
+                party = get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
+            else:
+                party = get_qnumber(wikiarticle=person['party'], lang="zh-tw")
             b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
             b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
             for q_id in get_qnumber(wikiarticle=name, lang="zh-tw", limit=None):
