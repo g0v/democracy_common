@@ -81,7 +81,7 @@ for row in c.fetchall():
         if not match:
             raise
     except:
-        position_labels = {"zh": position, "zh-tw": position}
+        position_labels = {"zh": position, "zh-tw": position, "zh-hant": position}
         position_item_id = create_item(wikidata_site, position_labels)
         position_item = pywikibot.ItemPage(repo, position_item_id)
         position_item.get()
@@ -134,8 +134,8 @@ for row in c.fetchall():
 
     # council
 
-    if not item.labels.get('zh-tw'):
-        labels = {'zh-tw': council_name}
+    if not item.labels.get('zh-hant'):
+        labels = {'zh-hant': council_name, 'zh-tw': council_name}
         item.editLabels(labels, asynchronous=False)
 
     # 性質

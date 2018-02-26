@@ -57,11 +57,11 @@ for r in c.fetchall():
     continue
 
     # Labels & Aliase
-    if not item.labels.get('zh-tw'):
-        labels = {'zh-tw': person['name']}
+    if not item.labels.get('zh-hant'):
+        labels = {'zh-hant': person['name'], 'zh-tw': person['name'], 'zh': person['name']}
         item.editLabels(labels, asynchronous=False)
     if person['names_count'] > 1 and not item.aliases.get('zh-tw'):
-        aliases = {'zh-tw': person['identifiers'], 'zh': person['identifiers']}
+        aliases = {'zh-hant': person['identifiers'], 'zh-tw': person['identifiers'], 'zh': person['identifiers']}
         item.editAliases(aliases, asynchronous=False)
 
     # Q82955 政治人物
@@ -215,12 +215,12 @@ for r in c.fetchall():
         wikidata_site = pywikibot.Site("wikidata", "wikidata")
         repo = wikidata_site.data_repository()
         c_item = pywikibot.ItemPage(wikidata_site, constituency)
-        labels = {'zh-tw': constituency_label}
+        labels = {'zh-hant': constituency_label, 'zh-tw': constituency_label}
         print(labels)
         c_item.editLabels(labels, asynchronous=False)
         if aliase != constituency_label:
-            aliases = {'zh-tw': [aliase], 'zh': [aliase]}
+            aliases = {'zh-hant': [aliase], 'zh-tw': [aliase], 'zh': [aliase]}
             c_item.editAliases(aliases, asynchronous=False)
         if person['district']:
-            descriptions = {'zh-tw': person['district'], 'zh': person['district']}
+            descriptions = {'zh-hant': person['district'], 'zh-tw': person['district'], 'zh': person['district']}
             c_item.editDescriptions(descriptions, asynchronous=False)

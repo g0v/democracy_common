@@ -79,8 +79,8 @@ for i, r in enumerate(c.fetchall()):
     item = utils.person_page_item(person)
 
     # Labels & Aliase
-    if not item.labels.get('zh-tw'):
-        labels = {'zh-tw': person['name']}
+    if not item.labels.get('zh-hant'):
+        labels = {'zh-hant': person['name'], 'zh-tw': person['name']}
         item.editLabels(labels, asynchronous=False)
     if person['names_count'] > 1 and not item.aliases.get('zh-tw'):
         aliases = {'zh-tw': person['identifiers'], 'zh': person['identifiers']}
@@ -219,6 +219,9 @@ for i, r in enumerate(c.fetchall()):
     # terms
     try:
         qualifier = claim.qualifiers['P2937']
+#       if qualifier[0].target != term_target:
+#           claim.removeQualifiers(qualifier)
+#           raise
     except:
         qualifier = pywikibot.Claim(repo, 'P2937')
         qualifier.setTarget(term_target)

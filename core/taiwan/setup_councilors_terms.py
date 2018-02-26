@@ -50,18 +50,18 @@ for i, row in enumerate(c.fetchall()):
             if item.labels['zh'] != term_name:
                 raise
     except:
-        labels = {"zh": term_name, "zh-tw": term_name}
+        labels = {"zh": term_name, "zh-tw": term_name, "zh-hant": term_name}
         item_id = utils.create_item(wikidata_site, labels)
     item = pywikibot.ItemPage(repo, item_id)
     item.get()
     print(term_name, item.id)
 
     # aliases
-    if term_description and not item.descriptions.get('zh-tw'):
-        descriptions = {'zh-tw': term_description, 'zh': term_description}
+    if term_description and not item.descriptions.get('zh-hant'):
+        descriptions = {'zh-hant': term_description, 'zh-tw': term_description, 'zh': term_description}
         item.editDescriptions(descriptions, asynchronous=False)
     if not item.aliases.get('zh-tw'):
-        aliases = {'zh-tw': [term_alias], 'zh': [term_alias]}
+        aliases = {'zh-hant': [term_alias], 'zh-tw': [term_alias], 'zh': [term_alias]}
         item.editAliases(aliases, asynchronous=False)
 
     # terms

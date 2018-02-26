@@ -33,21 +33,21 @@ for row in c.fetchall():
         if not item_id:
             raise
     except:
-        labels = {"zh": r['electoral_area_title'], "zh-tw": r['electoral_area_title']}
+        labels = {"zh": r['electoral_area_title'], "zh-tw": r['electoral_area_title'], "zh-hant": r['electoral_area_title']}
         item_id = utils.create_item(wikidata_site, labels)
     item = pywikibot.ItemPage(repo, item_id)
     item.get()
     print(r['electoral_area_title'], item.id)
 
     # description & aliases
-    if r['district'] and not item.descriptions.get('zh-tw'):
-        descriptions = {'zh-tw': r['district'], 'zh': r['district']}
+    if r['district'] and not item.descriptions.get('zh-hant'):
+        descriptions = {'zh-hant': r['district'], 'zh-tw': r['district'], 'zh': r['district']}
         item.editDescriptions(descriptions, asynchronous=False)
     if not item.aliases.get('zh-tw'):
         ref = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九']
         aliases_label = re.sub('\d+', ref[r['constituency']-1], r['electoral_area_title'])
         print(aliases_label)
-        aliases = {'zh-tw': [aliases_label], 'zh': [aliases_label]}
+        aliases = {'zh-hant': [aliases_label], 'zh-tw': [aliases_label], 'zh': [aliases_label]}
         item.editAliases(aliases, asynchronous=False)
 
     # electoral area
