@@ -74,7 +74,8 @@ def person_page_item(person):
 
     try:
         item.get()
-        if item.claims['P31'][0].target.id == 'Q4167410': # Q4167410 維基媒體消歧義頁
+        # Q4167410 維基媒體消歧義頁, Q13406463 維基媒體列表條目
+        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463']:
             try:
                 item.removeClaims(item.claims['P39'][0])
             except:
@@ -85,16 +86,26 @@ def person_page_item(person):
                 party = get_qnumber(wikiarticle=person['party'], lang="zh-tw")
             b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
             b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
+            b_year_target = pywikibot.WbTime(year=b_year, precision='year')
+            match = False
             for q_id in get_qnumber(wikiarticle=name, lang="zh-tw", limit=None):
                 item = pywikibot.ItemPage(wikidata_site, q_id)
                 item.get()
-                if item.claims.get('P569') and item.claims['P569'][0].target == b_target:
-                    break
+                if item.claims.get('P569'):
+                    if item.claims['P569'][0].target == b_target:
+                        match = True
+                        break
+                    if b_month == 1 and b_day == 1 and item.claims['P569'][0].target.year == b_year:
+                        match = True
+                        break
                 if item.claims.get('P102') and item.claims['P102'][0].target.id == party:
+                    match = True
                     break
+        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463'] or not match:
+            raise UnboundLocalError
         print(name, item)
     except UnboundLocalError:
-        labels = {"zh": person['name'], "zh-tw": person['name']}
+        labels = {"zh": person['name'], "zh-tw": person['name'], "zh-hant": person['name']}
         item_id = create_item(wikidata_site, labels)
         item = pywikibot.ItemPage(repo, item_id)
         item.get()
