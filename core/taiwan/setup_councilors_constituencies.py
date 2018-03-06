@@ -47,7 +47,6 @@ if os.path.isfile(wiki_maps_path):
 #    query_result = [item for item in generator]
 #    json.dump(query_result, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
 for r in wiki_maps:
-    break
     county_constituency_label = '%s議員選區' % r['cityLabel']
     if not r.get('county_constituency'):
         try:
@@ -74,6 +73,16 @@ for r in wiki_maps:
         target = pywikibot.ItemPage(repo, 'Q49924492') # Q49924492 縣市議員選區
         claim.setTarget(target)
         item.addClaim(claim)
+    claim = item.claims['P39'][0]
+
+    # of
+    try:
+        qualifier = claim.qualifiers['P642']
+    except:
+        qualifier = pywikibot.Claim(repo, 'P642')
+        target = pywikibot.ItemPage(wikidata_site, r['council'].split('/')[-1])
+        qualifier.setTarget(target)
+        claim.addQualifier(qualifier)
 
     # 國家
     try:
@@ -93,20 +102,11 @@ for r in wiki_maps:
         claim.setTarget(county_target)
         item.addClaim(claim)
 
-    # of
-    try:
-        item.claims['P642']
-    except:
-        claim = pywikibot.Claim(repo, 'P642')
-        county_target = pywikibot.ItemPage(wikidata_site, r['council'].split('/')[-1])
-        claim.setTarget(county_target)
-        item.addClaim(claim)
-
     r['county_constituency'] = item_id
     r['county_constituencyLabel'] = county_constituency_label
 json.dump(wiki_maps, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
 
-for row in c.fetchall()[110:]:
+for row in c.fetchall():
     r = row[0]
     print(r['county'])
     try:
