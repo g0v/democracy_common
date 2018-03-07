@@ -3,6 +3,17 @@ import requests
 import pywikibot
 
 
+def aborigine_id(text):
+    return {
+        '平地原住民': 'Q50355511',
+        '山地原住民': 'Q50355510'
+    }[text]
+
+def ordinal_numbers(number):
+    return ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th',
+'12th', '13th', '14th', '15th', '16th', '17th', '18th', '19th', '20th', '21st',
+'22nd', '23rd', '24th', '25th', '26th', '27th', '28th', '29th', '30th', '31st'][number-1]
+
 def get_term_ad(county, election_year):
     return {
         "臺北市": {'1969': 1, '1973': 2, '1977': 3, '1981': 4, '1985': 5, '1989': 6, '1994': 7, '1998': 8, '2002': 9, '2006': 10, '2010': 11, '2014': 12, '2018': 13},

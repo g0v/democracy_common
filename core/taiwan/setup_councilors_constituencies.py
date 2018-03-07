@@ -30,10 +30,7 @@ site = pywikibot.Site("zh", "wikipedia")
 wikidata_site = pywikibot.Site("wikidata", "wikidata")
 repo = site.data_repository()
 
-wiki_maps_path = 'taiwan/data/city_councils_councilor_maps.json'
-if os.path.isfile(wiki_maps_path):
-    wiki_maps = json.load(open(wiki_maps_path))
-#else:
+# Using query below to get taiwan/data/city_councils_councilor_maps.json
 #    query = '''
 #        SELECT ?council ?councilLabel ?city ?cityLabel ?councilor_position ?councilor_positionLabel WHERE {
 #            ?council wdt:P31 wd:Q3308596;
@@ -43,9 +40,8 @@ if os.path.isfile(wiki_maps_path):
 #            SERVICE wikibase:label { bd:serviceParam wikibase:language "zh-tw". }
 #        }
 #    '''
-#    generator = pg.WikidataSPARQLPageGenerator(query, site=wikidata_site)
-#    query_result = [item for item in generator]
-#    json.dump(query_result, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
+wiki_maps_path = 'taiwan/data/city_councils_councilor_maps.json'
+wiki_maps = json.load(open(wiki_maps_path))
 for r in wiki_maps:
     county_constituency_label = '%s議員選區' % r['cityLabel']
     if not r.get('county_constituency'):
@@ -63,6 +59,28 @@ for r in wiki_maps:
     item = pywikibot.ItemPage(repo, item_id)
     item.get()
     print(county_constituency_label, item.id)
+    if r.get('cityLabel_en'):
+        city_item = pywikibot.ItemPage(repo, r['city'].split('/')[-1])
+        city_item.get()
+        city_label_en = city_item.labels['en']
+    else:
+        city_label_en = r.get('cityLabel_en')
+
+    # English Labels
+    labels = {'en': 'Constituency of Regional Councilors of %s' % city_label_en}
+    if not item.labels.get('en'):
+        item.editLabels(labels, asynchronous=False)
+    data, aliases = defaultdict(dict), []
+    if re.search('^臺', county_constituency_label):
+        aliases.append(re.sub('^臺', '台', county_constituency_label))
+    elif re.search('^台', county_constituency_label):
+        aliases.append(re.sub('^台', '臺', county_constituency_label))
+    if aliases:
+        for code in ['zh', 'zh-tw', 'zh-hant']:
+            aliases_exist = item.aliases.get(code, [])
+            aliases_not_exist = [alias for alias in aliases if alias not in aliases_exist]
+            data['aliases'][code] = aliases_exist + aliases_not_exist
+        item.editEntity(data, asynchronous=False)
 
     # 性質
     try:
@@ -73,7 +91,7 @@ for r in wiki_maps:
         target = pywikibot.ItemPage(repo, 'Q49924492') # Q49924492 縣市議員選區
         claim.setTarget(target)
         item.addClaim(claim)
-    claim = item.claims['P39'][0]
+    claim = item.claims['P279'][0]
 
     # of
     try:
@@ -89,7 +107,7 @@ for r in wiki_maps:
         item.claims['P17']
     except:
         claim = pywikibot.Claim(repo, 'P17')
-        target = pywikibot.ItemPage(repo, 'Q865') # Q865 中華民國
+        target = pywikibot.ItemPage(repo, 'Q865') # Q865 Taiwan
         claim.setTarget(target)
         item.addClaim(claim)
 
@@ -102,10 +120,14 @@ for r in wiki_maps:
         claim.setTarget(county_target)
         item.addClaim(claim)
 
+    r['cityLabel_en'] = city_label_en
     r['county_constituency'] = item_id
     r['county_constituencyLabel'] = county_constituency_label
 json.dump(wiki_maps, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
 
+
+cec_councilors_constituency_path = 'taiwan/data/councilors_constituencies_2014_with_wikidata_id.json'
+cec_maps = json.load(open(cec_councilors_constituency_path))
 for row in c.fetchall():
     r = row[0]
     print(r['county'])
@@ -145,13 +167,25 @@ for row in c.fetchall():
             data['aliases'][code] = aliases_exist + aliases_not_exist
         item.editEntity(data, asynchronous=False)
 
-    # electoral area
+    # get reference for electoralr_area and constituency_type
 
     for f in wiki_maps:
         if f['cityLabel'] == r['county']:
             r['city'] = f['city'].split('/')[-1]
             r['county_constituency'] = f['county_constituency']
+            r['cityLabel_en'] = f['cityLabel_en']
             break
+
+    for f in cec_maps:
+        if f['wikidata_item'].split('/')[-1] == item.id:
+            r['constituency_type'] = f['constituency_type']
+            r['constituency_type_title'] = f['constituency_type_title']
+            break
+
+    # English Labels
+    if not item.labels.get('en'):
+        labels = {'en': '%s Constituency of Regional Councilors of %s' % (utils.ordinal_numbers(r['constituency']), r['cityLabel_en'])}
+        item.editLabels(labels, asynchronous=False)
 
     # 性質
     if r.get('county_constituency'):
@@ -165,12 +199,22 @@ for row in c.fetchall():
             claim.setTarget(target)
             item.addClaim(claim)
 
+    # Right to vote
+    if r['constituency_type'] == 'ethnical':
+        try:
+            item.claims['P2964']
+        except:
+            claim = pywikibot.Claim(repo, 'P2964')
+            target = pywikibot.ItemPage(repo, utils.aborigine_id(r['constituency_type_title'])) # Q865 Taiwan
+            claim.setTarget(target)
+            item.addClaim(claim)
+
     # 國家
     try:
         item.claims['P17']
     except:
         claim = pywikibot.Claim(repo, 'P17')
-        target = pywikibot.ItemPage(repo, 'Q865') # Q865 中華民國
+        target = pywikibot.ItemPage(repo, 'Q865') # Q865 Taiwan
         claim.setTarget(target)
         item.addClaim(claim)
 
