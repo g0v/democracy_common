@@ -35,11 +35,6 @@ maps = {
     "澎湖縣": "http://www.phcouncil.gov.tw/",
 }
 
-def create_item(site, label_dict):
-    new_item = pywikibot.ItemPage(site)
-    new_item.editLabels(labels=label_dict)
-    return new_item.getID()
-
 c.execute('''
     select row_to_json(_)
     from (
@@ -82,7 +77,7 @@ for row in c.fetchall():
             raise
     except:
         position_labels = {"zh": position, "zh-tw": position, "zh-hant": position}
-        position_item_id = create_item(wikidata_site, position_labels)
+        position_item_id = utils.create_item(wikidata_site, position_labels)
         position_item = pywikibot.ItemPage(repo, position_item_id)
         position_item.get()
         print('new position page created.')
@@ -120,7 +115,7 @@ for row in c.fetchall():
         position_item.claims['P17']
     except:
         claim = pywikibot.Claim(repo, 'P17')
-        target = pywikibot.ItemPage(repo, 'Q865') # Q865 中華民國
+        target = pywikibot.ItemPage(repo, 'Q865') # Q865 Taiwan
         claim.setTarget(target)
         position_item.addClaim(claim)
 
@@ -155,7 +150,7 @@ for row in c.fetchall():
         item.claims['P17']
     except:
         claim = pywikibot.Claim(repo, 'P17')
-        target = pywikibot.ItemPage(repo, 'Q865') # Q865 中華民國
+        target = pywikibot.ItemPage(repo, 'Q865') # Q865 Taiwan
         claim.setTarget(target)
         item.addClaim(claim)
 
