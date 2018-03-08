@@ -3,13 +3,23 @@ import requests
 import pywikibot
 
 
+def gender_id(text):
+    return {
+        '男': 'Q6581097',
+        '女': 'Q6581072'
+    }[text]
+
 def aborigine_id(text):
     return {
         '平地原住民': 'Q50355511',
         '山地原住民': 'Q50355510'
     }[text]
 
-def ordinal_numbers(number):
+
+def zh_number(number):
+    return ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'][number-1]
+
+def ordinal_number(number):
     return ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th',
 '12th', '13th', '14th', '15th', '16th', '17th', '18th', '19th', '20th', '21st',
 '22nd', '23rd', '24th', '25th', '26th', '27th', '28th', '29th', '30th', '31st'][number-1]
@@ -85,8 +95,11 @@ def person_page_item(person):
 
     try:
         item.get()
+        b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
+        b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
+        match = False
         # Q4167410 維基媒體消歧義頁, Q13406463 維基媒體列表條目
-        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463']:
+        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463'] or (item.claims.get('P569') and item.claims['P569'][0].target != b_target) or (item.claims.get('P569') and b_month == 1 and b_day == 1 and item.claims['P569'][0].target.year != b_year) or item.claims.get('P497'):
             try:
                 item.removeClaims(item.claims['P39'][0])
             except:
@@ -95,11 +108,8 @@ def person_page_item(person):
                 party = get_qnumber(wikiarticle=person['party'][0]['name'], lang="zh-tw")
             else:
                 party = get_qnumber(wikiarticle=person['party'], lang="zh-tw")
-            b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
-            b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
-            b_year_target = pywikibot.WbTime(year=b_year, precision='year')
-            match = False
             for q_id in get_qnumber(wikiarticle=name, lang="zh-tw", limit=None):
+                print(q_id)
                 item = pywikibot.ItemPage(wikidata_site, q_id)
                 item.get()
                 if item.claims.get('P569'):
@@ -117,9 +127,9 @@ def person_page_item(person):
         print(name, item)
     except UnboundLocalError:
         labels = {"zh": person['name'], "zh-tw": person['name'], "zh-hant": person['name']}
-        item_id = create_item(wikidata_site, labels)
-        item = pywikibot.ItemPage(repo, item_id)
-        item.get()
+#       item_id = create_item(wikidata_site, labels)
+#       item = pywikibot.ItemPage(repo, item_id)
+#       item.get()
     except KeyError:
         pass
     return item

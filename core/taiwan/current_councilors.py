@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import os
-import sys
 import json
 import time
 import pywikibot
@@ -135,18 +134,20 @@ for i, r in enumerate(c.fetchall()):
     term_start_year, term_start_month, term_start_day = [int(x) for x in person['term_start'].split('-')]
     term_start_target = pywikibot.WbTime(year=term_start_year, month=term_start_month, day=term_start_day, precision='day')
     # XX縣市議員
+    position_held_id = position_maps['%s議員' % person['county']]
     try:
         match = False
         for i, x in enumerate(item.claims['P39']):
-            if term_start_target == x.qualifiers['P580'][0].target:
-                claim = item.claims['P39'][i]
-                match = True
-                break
+            if x.target.id == position_held_id:
+                if len(x.qualifiers) == 0 or term_start_target == x.qualifiers['P580'][0].target:
+                    claim = item.claims['P39'][i]
+                    match = True
+                    break
         if not match:
             raise
     except:
         claim = pywikibot.Claim(repo, 'P39')
-        target = pywikibot.ItemPage(repo, position_maps['%s議員' % person['county']])
+        target = pywikibot.ItemPage(repo, position_held_id)
         claim.setTarget(target)
         item.addClaim(claim)
 

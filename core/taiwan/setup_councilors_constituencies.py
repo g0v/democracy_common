@@ -30,7 +30,7 @@ site = pywikibot.Site("zh", "wikipedia")
 wikidata_site = pywikibot.Site("wikidata", "wikidata")
 repo = site.data_repository()
 
-# Using query below to get taiwan/data/city_councils_councilor_maps.json
+## Using query below to get taiwan/data/city_councils_councilor_maps.json
 #    query = '''
 #        SELECT ?council ?councilLabel ?city ?cityLabel ?councilor_position ?councilor_positionLabel WHERE {
 #            ?council wdt:P31 wd:Q3308596;
@@ -184,7 +184,7 @@ for row in c.fetchall():
 
     # English Labels
     if not item.labels.get('en'):
-        labels = {'en': '%s Constituency of Regional Councilors of %s' % (utils.ordinal_numbers(r['constituency']), r['cityLabel_en'])}
+        labels = {'en': '%s Constituency of Regional Councilors of %s' % (utils.ordinal_number(r['constituency']), r['cityLabel_en'])}
         item.editLabels(labels, asynchronous=False)
 
     # 性質
@@ -205,7 +205,7 @@ for row in c.fetchall():
             item.claims['P2964']
         except:
             claim = pywikibot.Claim(repo, 'P2964')
-            target = pywikibot.ItemPage(repo, utils.aborigine_id(r['constituency_type_title'])) # Q865 Taiwan
+            target = pywikibot.ItemPage(repo, utils.aborigine_id(r['constituency_type_title']))
             claim.setTarget(target)
             item.addClaim(claim)
 

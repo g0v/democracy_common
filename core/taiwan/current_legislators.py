@@ -8,16 +8,16 @@ from common import db_settings, utils
 conn = db_settings.con_ly()
 c = conn.cursor()
 
-overwrite = False
 sleep_second = 5
-refs = {
-    '男': 'Q6581097',
-    '女': 'Q6581072'
-}
+site = pywikibot.Site("zh", "wikipedia")
+repo = site.data_repository()
 ad = 9
 election_years = [1989, 1992, 1995, 1998, 2001, 2004, 2008, 2012, 2016, 2020]
 election_title = '%d年立法委員選舉' % election_years[ad-1]
-ref = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九']
+election_id = utils.get_qnumber(wikiarticle=election_title, lang="zh-tw")
+election_target = pywikibot.ItemPage(repo, election_id)
+term_id = utils.get_qnumber(wikiarticle="第%d屆立法委員" % ad, lang="zh-tw")
+term_target = pywikibot.ItemPage(repo, term_id)
 
 def person_from_db(name):
     c.execute('''
@@ -44,17 +44,11 @@ c.execute('''
         where l.ad = %s
     ) _
 ''', [ad, ])
-site = pywikibot.Site("zh", "wikipedia")
-repo = site.data_repository()
 for r in c.fetchall():
     person = r[0]
     item = utils.person_page_item(person)
     item.get()
-    print(item)
-
-    # Q6310593 立法委員
-    claim = item.claims['P39'][0]
-    continue
+    print(person['name'], item.id)
 
     # Labels & Aliase
     if not item.labels.get('zh-hant'):
@@ -79,7 +73,7 @@ for r in c.fetchall():
         item.claims['P21']
     except:
         claim = pywikibot.Claim(repo, 'P21')
-        target = pywikibot.ItemPage(repo, refs[person['gender']])
+        target = pywikibot.ItemPage(repo, utils.gender_id(person['gender']))
         claim.setTarget(target)
         item.addClaim(claim)
 
@@ -96,26 +90,32 @@ for r in c.fetchall():
         claim.setTarget(b_target)
         item.addClaim(claim)
 
+    # term_start
+    term_start_year, term_start_month, term_start_day = [int(x) for x in person['term_start'].split('-')]
+    term_start_target = pywikibot.WbTime(year=term_start_year, month=term_start_month, day=term_start_day, precision='day')
     # Q6310593 立法委員
     try:
-        item.claims['P39']
-        if not overwrite:
-            continue
+        match = False
+        for i, x in enumerate(item.claims['P39']):
+            if x.target.id == 'Q6310593':
+                if len(x.qualifiers) == 0 or term_start_target == x.qualifiers['P580'][0].target:
+                    claim = item.claims['P39'][i]
+                    match = True
+                    break
+        if not match:
+            raise
     except:
         claim = pywikibot.Claim(repo, 'P39')
-        target = pywikibot.ItemPage(repo, "Q6310593")
+        target = pywikibot.ItemPage(repo, 'Q6310593')
         claim.setTarget(target)
         item.addClaim(claim)
-    claim = item.claims['P39'][0]
 
     # start at
     try:
         qualifier = claim.qualifiers['P580']
     except:
         qualifier = pywikibot.Claim(repo, 'P580')
-        year, month, day = [int(x) for x in person['term_start'].split('-')]
-        target = pywikibot.WbTime(year=year, month=month, day=day, precision='day')
-        qualifier.setTarget(target)
+        qualifier.setTarget(term_start_target)
         claim.addQualifier(qualifier)
         time.sleep(sleep_second)
 
@@ -124,9 +124,7 @@ for r in c.fetchall():
         qualifier = claim.qualifiers['P2715']
     except:
         qualifier = pywikibot.Claim(repo, 'P2715')
-        election = utils.get_qnumber(wikiarticle=election_title, lang="zh-tw")
-        target = pywikibot.ItemPage(repo, election)
-        qualifier.setTarget(target)
+        qualifier.setTarget(election_target)
         claim.addQualifier(qualifier)
         time.sleep(sleep_second)
 
@@ -180,47 +178,28 @@ for r in c.fetchall():
         qualifier = claim.qualifiers['P2937']
     except:
         qualifier = pywikibot.Claim(repo, 'P2937')
-        term = utils.get_qnumber(wikiarticle="第%d屆立法委員" % person['ad'], lang="zh-tw")
-        target = pywikibot.ItemPage(repo, term)
-        qualifier.setTarget(target)
+        qualifier.setTarget(term_target)
         claim.addQualifier(qualifier)
         time.sleep(sleep_second)
 
     # constituency
     if person['county'] == '全國不分區':
         constituency_label = person['county']
-        aliase = constituency_label
         constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
     else:
-        constituency_label = "%s第%s選舉區" % (person['county'], ref[person['constituency']-1])
-        aliase = "%s第%d選舉區" % (person['county'], person['constituency'])
+        constituency_label = "%s第%s選舉區" % (person['county'], utils.zh_number(person['constituency']))
         constituency = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
         if not constituency and person['county'] == '桃園市':
-            constituency = utils.get_qnumber(wikiarticle="桃園縣第%s選舉區" % (ref[person['constituency']-1]), lang="zh-tw")
+            constituency = utils.get_qnumber(wikiarticle="桃園縣第%s選舉區" % (utils.zh_number(person['constituency'])), lang="zh-tw")
         elif not constituency and person['constituency'] == 1:
             constituency_label = "%s選舉區" % (person['county'])
-            aliase = constituency_label
             constituency = utils.get_qnumber(constituency_label, lang="zh-tw")
     try:
         qualifier = claim.qualifiers['P768']
     except:
-        print(constituency_label, constituency, aliase)
+        print(constituency_label, constituency)
         qualifier = pywikibot.Claim(repo, 'P768')
         target = pywikibot.ItemPage(repo, constituency)
         qualifier.setTarget(target)
         claim.addQualifier(qualifier)
         time.sleep(sleep_second)
-
-    if person['county'] != '全國不分區':
-        wikidata_site = pywikibot.Site("wikidata", "wikidata")
-        repo = wikidata_site.data_repository()
-        c_item = pywikibot.ItemPage(wikidata_site, constituency)
-        labels = {'zh-hant': constituency_label, 'zh-tw': constituency_label}
-        print(labels)
-        c_item.editLabels(labels, asynchronous=False)
-        if aliase != constituency_label:
-            aliases = {'zh-hant': [aliase], 'zh-tw': [aliase], 'zh': [aliase]}
-            c_item.editAliases(aliases, asynchronous=False)
-        if person['district']:
-            descriptions = {'zh-hant': person['district'], 'zh-tw': person['district'], 'zh': person['district']}
-            c_item.editDescriptions(descriptions, asynchronous=False)
