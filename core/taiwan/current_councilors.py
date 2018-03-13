@@ -26,6 +26,17 @@ election_ids = {
 }
 election_id = election_ids[election_year]
 
+def person_qid_from_db(name):
+    c.execute('''
+        select lm.data->>'wikidata_qid'
+        from councilors_councilorsdetail l
+        left join councilors_councilors lm on l.councilor_id = lm.uid
+        where l.election_year = %s and (l.name = %s or lm.identifiers ? %s)
+    ''', [election_year, name, name])
+    r = c.fetchone()
+    if r:
+        return r[0]
+
 def person_from_db(name):
     c.execute('''
         select row_to_json(_)
@@ -39,7 +50,6 @@ def person_from_db(name):
         ) _
     ''', [election_year, name, name])
     return c.fetchone()[0]
-
 
 site = pywikibot.Site("zh", "wikipedia")
 wikidata_site = pywikibot.Site("wikidata", "wikidata")
@@ -63,7 +73,7 @@ else:
 c.execute('''
     select row_to_json(_)
     from (
-        select l.*, c.constituency, coalesce(c.district, l.district) as district, coalesce(c.gender, l.gender) as gender, lm.identifiers, coalesce(cm.birth, lm.birth) as birth, coalesce(jsonb_array_length(cm.identifiers), 0) as names_count, l.county || '議員第' || c.constituency || '選舉區' as electoral_area_title
+        select l.*, c.constituency, coalesce(c.district, l.district) as district, coalesce(c.gender, l.gender) as gender, lm.identifiers, coalesce(lm.birth, cm.birth) as birth, lm.data->>'wikidata_qid' as wikidata_qid, coalesce(jsonb_array_length(cm.identifiers), 0) as names_count, l.county || '議員第' || c.constituency || '選舉區' as electoral_area_title
         from councilors_councilorsdetail l
         left join candidates_terms c on c.elected_councilor_id = l.id
         left join candidates_candidates cm on c.candidate_id = cm.uid
@@ -76,6 +86,7 @@ for i, r in enumerate(c.fetchall()):
     person = r[0]
     print(i, person['name'])
     item = utils.person_page_item(person)
+    print(item.id)
 
     # Labels & Aliase
     if not item.labels.get('zh-hant'):
@@ -105,31 +116,36 @@ for i, r in enumerate(c.fetchall()):
         item.addClaim(claim)
 
     # 性別
-    try:
-        item.claims['P21']
-    except:
-        claim = pywikibot.Claim(repo, 'P21')
-        target = pywikibot.ItemPage(repo, refs[person['gender']])
-        claim.setTarget(target)
-        item.addClaim(claim)
+    if person['gender']:
+        try:
+            item.claims['P21']
+        except:
+            claim = pywikibot.Claim(repo, 'P21')
+            target = pywikibot.ItemPage(repo, refs[person['gender']])
+            claim.setTarget(target)
+            item.addClaim(claim)
 
     # 生日
-    # councilors didn't have birth date but oly birth year at this time 2018-02-25
+    # most councilors didn't have birth date but only birth year at this time 2018-02-25
     if person['birth']:
         try:
             item.claims['P569']
         except:
             claim = pywikibot.Claim(repo, 'P569')
             b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
-            b_target = pywikibot.WbTime(year=b_year, precision='year')
-            claim.setTarget(b_target)
+            if b_month == 1 and b_day == 1:
+                b_year_target = pywikibot.WbTime(year=b_year, precision='year')
+                claim.setTarget(b_year_target)
+            else:
+                b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
+                claim.setTarget(b_target)
             item.addClaim(claim)
 
     # term
     ad = utils.get_term_ad(person['county'], person['election_year'])
     term_name = '第%d屆%s議員' % (ad, person['county'])
-    item_id = utils.get_qnumber(wikiarticle=term_name, lang="zh-tw")
-    term_target = pywikibot.ItemPage(repo, item_id)
+    term_id = utils.get_qnumber(wikiarticle=term_name, lang="zh-tw")
+    term_target = pywikibot.ItemPage(repo, term_id)
     # term_start
     term_start_year, term_start_month, term_start_day = [int(x) for x in person['term_start'].split('-')]
     term_start_target = pywikibot.WbTime(year=term_start_year, month=term_start_month, day=term_start_day, precision='day')
@@ -182,11 +198,15 @@ for i, r in enumerate(c.fetchall()):
             claim.addQualifier(qualifier)
             time.sleep(sleep_second)
         # replaced by
-        print('replaced by: "%s"' % person['term_end']['replacement'])
         if person['term_end'].get('replacement'):
-            target = utils.person_page_item(person_from_db(person['term_end']['replacement']))
+            print('replaced by: "%s"' % person['term_end']['replacement'])
+            target_id = person_qid_from_db(person['term_end']['replacement'])
+            if target_id:
+                target = pywikibot.ItemPage(repo, target_id)
+            else:
+                target = utils.person_page_item(person_from_db(person['term_end']['replacement']))
             try:
-                qualifier = claim.qualifiers['P1366']
+                claim.qualifiers['P1366']
             except:
                 qualifier = pywikibot.Claim(repo, 'P1366')
                 qualifier.setTarget(target)
@@ -194,14 +214,21 @@ for i, r in enumerate(c.fetchall()):
                 time.sleep(sleep_second)
             # replaces
             try:
-                replaces_claim = target.claims['P39'][0]
-                try:
-                    qualifier = replaces_claim.qualifiers['P1365']
-                except:
-                    qualifier = pywikibot.Claim(repo, 'P1365')
-                    qualifier.setTarget(item)
-                    replaces_claim.addQualifier(qualifier)
-                    time.sleep(sleep_second)
+                match = False
+                for i, x in enumerate(target.claims['P39']):
+                    if x.target.id == position_held_id:
+                        if term_id == x.qualifiers['P2937'][0].target.id:
+                            claim = item.claims['P39'][i]
+                            match = True
+                            break
+                if match:
+                    try:
+                        claim.qualifiers['P1365']
+                    except:
+                        qualifier = pywikibot.Claim(repo, 'P1365')
+                        qualifier.setTarget(item)
+                        claim.addQualifier(qualifier)
+                        time.sleep(sleep_second)
             except:
                 pass
 
@@ -244,5 +271,8 @@ for i, r in enumerate(c.fetchall()):
         UPDATE councilors_councilors
         SET data = (COALESCE(data, '{}'::jsonb) || %s::jsonb)
         WHERE uid = %s
-    ''', (json.dumps({'wikidata_qid': item.id}), person['councilor_id']))
+    ''', (json.dumps({
+        'wikidata_qid': item.id,
+        'wikidata': item.toJSON()
+    }), person['councilor_id']))
     conn.commit()

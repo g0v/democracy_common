@@ -12,7 +12,7 @@ from common import db_settings, utils
 conn = db_settings.con_ly()
 c = conn.cursor()
 
-ad = 9
+ad = 8
 
 c.execute('''
     select row_to_json(_)
@@ -67,6 +67,18 @@ for r in c.fetchall():
             item.addClaim(claim)
     else:
         constituency_label = "%s第%s選舉區" % (r['county'], utils.zh_number(r['constituency']))
+        try:
+            item_id = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
+            if not item_id:
+                raise
+        except:
+            labels = {}
+            for code in ['zh', 'zh-tw', 'zh-hant']:
+                labels[code] = constituency_label
+            item_id = utils.create_item(wikidata_site, labels)
+        item = pywikibot.ItemPage(repo, item_id)
+        item.get()
+
         data = defaultdict(dict)
         aliases_label = []
         for x in [utils.zh_number(r['constituency']), '%d' % r['constituency'], '%02d' % r['constituency']]:
@@ -76,15 +88,15 @@ for r in c.fetchall():
                         aliases_label.append("%s第%s%s" % (z, x, y))
                 else:
                     aliases_label.append("%s第%s%s" % (r['county'], x, y))
-        constituency_id = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
-        if not constituency_id and r['constituency'] == 1:
-            constituency_label = "%s選舉區" % (r['county'])
-            aliases_label.extend([
-                constituency_label,
-                "%s選區" % (r['county']),
-            ])
-            constituency_id = utils.get_qnumber(constituency_label, lang="zh-tw")
-        print(constituency_label, constituency_id)
+#       constituency_id = utils.get_qnumber(wikiarticle=constituency_label, lang="zh-tw")
+#       if not constituency_id and r['constituency'] == 1:
+#           constituency_label = "%s選舉區" % (r['county'])
+#           aliases_label.extend([
+#               constituency_label,
+#               "%s選區" % (r['county']),
+#           ])
+#           constituency_id = utils.get_qnumber(constituency_label, lang="zh-tw")
+#       print(constituency_label, constituency_id)
 
         for f in wiki_maps:
             if f['cityLabel'] == r['county']:
@@ -92,11 +104,8 @@ for r in c.fetchall():
                 r['cityLabel_en'] = f['cityLabel_en']
                 break
 
-        item = pywikibot.ItemPage(wikidata_site, constituency_id)
-        item.get()
-
         # English Labels
-        if not item.labels.get('en'):
+        if r.get('cityLabel_en') and not item.labels.get('en'):
             labels = {'en': '%s Constituency of National Legislators of %s' % (utils.ordinal_number(r['constituency']), r['cityLabel_en'])}
             item.editLabels(labels, asynchronous=False)
 
