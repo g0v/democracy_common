@@ -84,14 +84,19 @@ for r in wiki_maps:
 
     # 性質
     try:
-        if 'Q49924492' not in [x.target.id for x in item.claims['P279']]:
+        match = False
+        for x in item.claims['P279']:
+            if 'Q49924492' == x.target.id:
+                claim = x
+                match = True
+                break
+        if not match:
             raise
     except:
         claim = pywikibot.Claim(repo, 'P279')
         target = pywikibot.ItemPage(repo, 'Q49924492') # Q49924492 縣市議員選區
         claim.setTarget(target)
         item.addClaim(claim)
-    claim = item.claims['P279'][0]
 
     # of
     try:
@@ -111,11 +116,16 @@ for r in wiki_maps:
         claim.setTarget(target)
         item.addClaim(claim)
 
-    # 管轄區域
+    # 所在行政區
     try:
-        item.claims['P1001']
+        claims = item.claims['P1001']
+        item.removeClaims(claims)
     except:
-        claim = pywikibot.Claim(repo, 'P1001')
+        pass
+    try:
+        item.claims['P131']
+    except:
+        claim = pywikibot.Claim(repo, 'P131')
         county_target = pywikibot.ItemPage(wikidata_site, r['city'].split('/')[-1])
         claim.setTarget(county_target)
         item.addClaim(claim)
@@ -125,7 +135,7 @@ for r in wiki_maps:
     r['county_constituencyLabel'] = county_constituency_label
 json.dump(wiki_maps, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
 
-
+'''
 cec_councilors_constituency_path = 'taiwan/data/councilors_constituencies_2014_with_wikidata_id.json'
 cec_maps = json.load(open(cec_councilors_constituency_path))
 for row in c.fetchall():
@@ -234,3 +244,4 @@ for row in c.fetchall():
             county_target = pywikibot.ItemPage(wikidata_site, r['city'])
         claim.setTarget(county_target)
         item.addClaim(claim)
+        '''

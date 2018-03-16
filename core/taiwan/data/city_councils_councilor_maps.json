@@ -1,244 +1,244 @@
 [
   {
     "county_constituencyLabel": "高雄市議員選區",
-    "cityLabel_en": "Kaohsiung City",
-    "council": "http://www.wikidata.org/entity/Q6366073",
+    "cityLabel": "高雄市",
     "councilor_positionLabel": "高雄市議員",
+    "county_constituency": "Q50314162",
+    "cityLabel_en": "Kaohsiung City",
     "councilor_position": "http://www.wikidata.org/entity/Q49257749",
     "councilLabel": "高雄市議會",
     "city": "http://www.wikidata.org/entity/Q181557",
-    "county_constituency": "Q50314162",
-    "cityLabel": "高雄市"
+    "council": "http://www.wikidata.org/entity/Q6366073"
   },
   {
     "county_constituencyLabel": "臺南市議員選區",
-    "cityLabel_en": "Tainan",
-    "council": "http://www.wikidata.org/entity/Q7676191",
+    "cityLabel": "臺南市",
     "councilor_positionLabel": "臺南市議員",
+    "county_constituency": "Q50314181",
+    "cityLabel_en": "Tainan",
     "councilor_position": "http://www.wikidata.org/entity/Q49256480",
     "councilLabel": "臺南市議會",
     "city": "http://www.wikidata.org/entity/Q140631",
-    "county_constituency": "Q50314181",
-    "cityLabel": "臺南市"
+    "council": "http://www.wikidata.org/entity/Q7676191"
   },
   {
     "county_constituencyLabel": "臺北市議員選區",
-    "cityLabel_en": "Taipei",
-    "council": "http://www.wikidata.org/entity/Q7676278",
+    "cityLabel": "臺北市",
     "councilor_positionLabel": "臺北市議員",
+    "county_constituency": "Q50314182",
+    "cityLabel_en": "Taipei",
     "councilor_position": "http://www.wikidata.org/entity/Q49256298",
     "councilLabel": "臺北市議會",
     "city": "http://www.wikidata.org/entity/Q1867",
-    "county_constituency": "Q50314182",
-    "cityLabel": "臺北市"
+    "council": "http://www.wikidata.org/entity/Q7676278"
   },
   {
     "county_constituencyLabel": "南投縣議員選區",
-    "cityLabel_en": "Nantou County",
-    "council": "http://www.wikidata.org/entity/Q10907927",
+    "cityLabel": "南投縣",
     "councilor_positionLabel": "南投縣議員",
+    "county_constituency": "Q50314184",
+    "cityLabel_en": "Nantou County",
     "councilor_position": "http://www.wikidata.org/entity/Q49254306",
     "councilLabel": "南投縣議會",
     "city": "http://www.wikidata.org/entity/Q82357",
-    "county_constituency": "Q50314184",
-    "cityLabel": "南投縣"
+    "council": "http://www.wikidata.org/entity/Q10907927"
   },
   {
     "county_constituencyLabel": "嘉義市議員選區",
-    "cityLabel_en": "Chiayi City",
-    "council": "http://www.wikidata.org/entity/Q10924120",
+    "cityLabel": "嘉義市",
     "councilor_positionLabel": "嘉義市議員",
+    "county_constituency": "Q50314187",
+    "cityLabel_en": "Chiayi City",
     "councilor_position": "http://www.wikidata.org/entity/Q49254452",
     "councilLabel": "嘉義市議會",
     "city": "http://www.wikidata.org/entity/Q249995",
-    "county_constituency": "Q50314187",
-    "cityLabel": "嘉義市"
+    "council": "http://www.wikidata.org/entity/Q10924120"
   },
   {
     "county_constituencyLabel": "嘉義縣議員選區",
-    "cityLabel_en": "Chiayi County",
-    "council": "http://www.wikidata.org/entity/Q10924150",
+    "cityLabel": "嘉義縣",
     "councilor_positionLabel": "嘉義縣議員",
+    "county_constituency": "Q50314189",
+    "cityLabel_en": "Chiayi County",
     "councilor_position": "http://www.wikidata.org/entity/Q49254596",
     "councilLabel": "嘉義縣議會",
     "city": "http://www.wikidata.org/entity/Q166977",
-    "county_constituency": "Q50314189",
-    "cityLabel": "嘉義縣"
+    "council": "http://www.wikidata.org/entity/Q10924150"
   },
   {
     "county_constituencyLabel": "基隆市議員選區",
-    "cityLabel_en": "Keelung",
-    "council": "http://www.wikidata.org/entity/Q10930444",
+    "cityLabel": "基隆市",
     "councilor_positionLabel": "基隆市議員",
+    "county_constituency": "Q50314191",
+    "cityLabel_en": "Keelung",
     "councilor_position": "http://www.wikidata.org/entity/Q49254733",
     "councilLabel": "基隆市議會",
     "city": "http://www.wikidata.org/entity/Q249996",
-    "county_constituency": "Q50314191",
-    "cityLabel": "基隆市"
+    "council": "http://www.wikidata.org/entity/Q10930444"
   },
   {
     "county_constituencyLabel": "彰化縣議員選區",
-    "cityLabel_en": "Changhua County",
-    "council": "http://www.wikidata.org/entity/Q11070079",
+    "cityLabel": "彰化縣",
     "councilor_positionLabel": "彰化縣議員",
+    "county_constituency": "Q50314193",
+    "cityLabel_en": "Changhua County",
     "councilor_position": "http://www.wikidata.org/entity/Q49255147",
     "councilLabel": "彰化縣議會",
     "city": "http://www.wikidata.org/entity/Q133865",
-    "county_constituency": "Q50314193",
-    "cityLabel": "彰化縣"
+    "council": "http://www.wikidata.org/entity/Q11070079"
   },
   {
     "county_constituencyLabel": "新北市議員選區",
-    "cityLabel_en": "New Taipei City",
-    "council": "http://www.wikidata.org/entity/Q11081523",
+    "cityLabel": "新北市",
     "councilor_positionLabel": "新北市議員",
+    "county_constituency": "Q50314196",
+    "cityLabel_en": "New Taipei City",
     "councilor_position": "http://www.wikidata.org/entity/Q48976144",
     "councilLabel": "新北市議會",
     "city": "http://www.wikidata.org/entity/Q244898",
-    "county_constituency": "Q50314196",
-    "cityLabel": "新北市"
+    "council": "http://www.wikidata.org/entity/Q11081523"
   },
   {
     "county_constituencyLabel": "新竹市議員選區",
-    "cityLabel_en": "Hsinchu",
-    "council": "http://www.wikidata.org/entity/Q11084017",
+    "cityLabel": "新竹市",
     "councilor_positionLabel": "新竹市議員",
+    "county_constituency": "Q50314199",
+    "cityLabel_en": "Hsinchu",
     "councilor_position": "http://www.wikidata.org/entity/Q49255439",
     "councilLabel": "新竹市議會",
     "city": "http://www.wikidata.org/entity/Q249994",
-    "county_constituency": "Q50314199",
-    "cityLabel": "新竹市"
+    "council": "http://www.wikidata.org/entity/Q11084017"
   },
   {
     "county_constituencyLabel": "新竹縣議員選區",
-    "cityLabel_en": "Hsinchu County",
-    "council": "http://www.wikidata.org/entity/Q11084065",
+    "cityLabel": "新竹縣",
     "councilor_positionLabel": "新竹縣議員",
+    "county_constituency": "Q50314200",
+    "cityLabel_en": "Hsinchu County",
     "councilor_position": "http://www.wikidata.org/entity/Q49255593",
     "councilLabel": "新竹縣議會",
     "city": "http://www.wikidata.org/entity/Q74054",
-    "county_constituency": "Q50314200",
-    "cityLabel": "新竹縣"
+    "council": "http://www.wikidata.org/entity/Q11084065"
   },
   {
     "county_constituencyLabel": "桃園市議員選區",
-    "cityLabel_en": "Taoyuan City",
-    "council": "http://www.wikidata.org/entity/Q11112210",
+    "cityLabel": "桃園市",
     "councilor_positionLabel": "桃園市議員",
+    "county_constituency": "Q50314202",
+    "cityLabel_en": "Taoyuan City",
     "councilor_position": "http://www.wikidata.org/entity/Q49255748",
     "councilLabel": "桃園市議會",
     "city": "http://www.wikidata.org/entity/Q115256",
-    "county_constituency": "Q50314202",
-    "cityLabel": "桃園市"
+    "council": "http://www.wikidata.org/entity/Q11112210"
   },
   {
     "county_constituencyLabel": "臺中市議員選區",
-    "cityLabel_en": "Taichung",
-    "council": "http://www.wikidata.org/entity/Q15899378",
+    "cityLabel": "臺中市",
     "councilor_positionLabel": "臺中市議員",
+    "county_constituency": "Q50314204",
+    "cityLabel_en": "Taichung",
     "councilor_position": "http://www.wikidata.org/entity/Q10493791",
     "councilLabel": "臺中市議會",
     "city": "http://www.wikidata.org/entity/Q245023",
-    "county_constituency": "Q50314204",
-    "cityLabel": "臺中市"
+    "council": "http://www.wikidata.org/entity/Q15899378"
   },
   {
     "county_constituencyLabel": "屏東縣議員選區",
-    "cityLabel_en": "Pingtung County",
-    "council": "http://www.wikidata.org/entity/Q15903185",
+    "cityLabel": "屏東縣",
     "councilor_positionLabel": "屏東縣議員",
+    "county_constituency": "Q50314205",
+    "cityLabel_en": "Pingtung County",
     "councilor_position": "http://www.wikidata.org/entity/Q49255006",
     "councilLabel": "屏東縣議會",
     "city": "http://www.wikidata.org/entity/Q194989",
-    "county_constituency": "Q50314205",
-    "cityLabel": "屏東縣"
+    "council": "http://www.wikidata.org/entity/Q15903185"
   },
   {
     "county_constituencyLabel": "苗栗縣議員選區",
-    "cityLabel_en": "Miaoli County",
-    "council": "http://www.wikidata.org/entity/Q15904162",
+    "cityLabel": "苗栗縣",
     "councilor_positionLabel": "苗栗縣議員",
+    "county_constituency": "Q50314206",
+    "cityLabel_en": "Miaoli County",
     "councilor_position": "http://www.wikidata.org/entity/Q49257021",
     "councilLabel": "苗栗縣議會",
     "city": "http://www.wikidata.org/entity/Q63706",
-    "county_constituency": "Q50314206",
-    "cityLabel": "苗栗縣"
+    "council": "http://www.wikidata.org/entity/Q15904162"
   },
   {
     "county_constituencyLabel": "臺東縣議員選區",
-    "cityLabel_en": "Taitung County",
-    "council": "http://www.wikidata.org/entity/Q15908339",
+    "cityLabel": "臺東縣",
     "councilor_positionLabel": "臺東縣議員",
+    "county_constituency": "Q50314210",
+    "cityLabel_en": "Taitung County",
     "councilor_position": "http://www.wikidata.org/entity/Q49256666",
     "councilLabel": "臺東縣議會",
     "city": "http://www.wikidata.org/entity/Q249904",
-    "county_constituency": "Q50314210",
-    "cityLabel": "臺東縣"
+    "council": "http://www.wikidata.org/entity/Q15908339"
   },
   {
     "county_constituencyLabel": "雲林縣議員選區",
-    "cityLabel_en": "Yunlin County",
-    "council": "http://www.wikidata.org/entity/Q15908941",
+    "cityLabel": "雲林縣",
     "councilor_positionLabel": "雲林縣議員",
+    "county_constituency": "Q50314215",
+    "cityLabel_en": "Yunlin County",
     "councilor_position": "http://www.wikidata.org/entity/Q49257574",
     "councilLabel": "雲林縣議會",
     "city": "http://www.wikidata.org/entity/Q153221",
-    "county_constituency": "Q50314215",
-    "cityLabel": "雲林縣"
+    "council": "http://www.wikidata.org/entity/Q15908941"
   },
   {
     "county_constituencyLabel": "宜蘭縣議員選區",
-    "cityLabel_en": "Yilan County",
-    "council": "http://www.wikidata.org/entity/Q15909148",
+    "cityLabel": "宜蘭縣",
     "councilor_positionLabel": "宜蘭縣議員",
+    "county_constituency": "Q50314222",
+    "cityLabel_en": "Yilan County",
     "councilor_position": "http://www.wikidata.org/entity/Q49254881",
     "councilLabel": "宜蘭縣議會",
     "city": "http://www.wikidata.org/entity/Q237258",
-    "county_constituency": "Q50314222",
-    "cityLabel": "宜蘭縣"
+    "council": "http://www.wikidata.org/entity/Q15909148"
   },
   {
     "county_constituencyLabel": "花蓮縣議員選區",
-    "cityLabel_en": "Hualien County",
-    "council": "http://www.wikidata.org/entity/Q15909304",
+    "cityLabel": "花蓮縣",
     "councilor_positionLabel": "花蓮縣議員",
+    "county_constituency": "Q50314224",
+    "cityLabel_en": "Hualien County",
     "councilor_position": "http://www.wikidata.org/entity/Q49256840",
     "councilLabel": "花蓮縣議會",
     "city": "http://www.wikidata.org/entity/Q249868",
-    "county_constituency": "Q50314224",
-    "cityLabel": "花蓮縣"
+    "council": "http://www.wikidata.org/entity/Q15909304"
   },
   {
     "county_constituencyLabel": "金門縣議員選區",
-    "cityLabel_en": "Kinmen",
-    "council": "http://www.wikidata.org/entity/Q15914537",
+    "cityLabel": "金門縣",
     "councilor_positionLabel": "金門縣議員",
+    "county_constituency": "Q50314226",
+    "cityLabel_en": "Kinmen",
     "councilor_position": "http://www.wikidata.org/entity/Q49257377",
     "councilLabel": "金門縣議會",
     "city": "http://www.wikidata.org/entity/Q249870",
-    "county_constituency": "Q50314226",
-    "cityLabel": "金門縣"
+    "council": "http://www.wikidata.org/entity/Q15914537"
   },
   {
     "county_constituencyLabel": "澎湖縣議員選區",
-    "cityLabel_en": "Penghu County",
-    "council": "http://www.wikidata.org/entity/Q15915051",
+    "cityLabel": "澎湖縣",
     "councilor_positionLabel": "澎湖縣議員",
+    "county_constituency": "Q50314229",
+    "cityLabel_en": "Penghu County",
     "councilor_position": "http://www.wikidata.org/entity/Q49255918",
     "councilLabel": "澎湖縣議會",
     "city": "http://www.wikidata.org/entity/Q198525",
-    "county_constituency": "Q50314229",
-    "cityLabel": "澎湖縣"
+    "council": "http://www.wikidata.org/entity/Q15915051"
   },
   {
     "county_constituencyLabel": "連江縣議員選區",
-    "cityLabel_en": "Lienchiang County",
-    "council": "http://www.wikidata.org/entity/Q15919452",
+    "cityLabel": "連江縣",
     "councilor_positionLabel": "連江縣議員",
+    "county_constituency": "Q50314237",
+    "cityLabel_en": "Lienchiang County",
     "councilor_position": "http://www.wikidata.org/entity/Q49257199",
     "councilLabel": "連江縣議會",
     "city": "http://www.wikidata.org/entity/Q249872",
-    "county_constituency": "Q50314237",
-    "cityLabel": "連江縣"
+    "council": "http://www.wikidata.org/entity/Q15919452"
   }
 ]
