@@ -1,0 +1,146 @@
+{
+  "울산광역시": {
+    "zh": "蔚山廣域市",
+    "en": "Ulsan",
+    "id": "Q41278",
+    "council": "Q16099049",
+    "county_councilor_constituency": "Q50572278"
+  },
+  "평안남도": {
+    "zh": "平安南道",
+    "en": "South Pyeongan Province, Republic of Korea",
+    "id": "Q2949550"
+  },
+  "함경북도": {
+    "zh": "咸鏡北道",
+    "en": "North Hamgyeong Province",
+    "id": "Q2949557"
+  },
+  "황해도": {
+    "zh": "黄海道",
+    "en": "Hwanghae Province",
+    "id": "Q2949547"
+  },
+  "경상북도": {
+    "zh": "慶尚北道",
+    "en": "North Gyeongsang Province",
+    "id": "Q41154",
+    "council": "Q16093885",
+    "county_councilor_constituency": "Q50572284"
+  },
+  "제주특별자치도": {
+    "zh": "濟州特別自治道",
+    "en": "Jeju",
+    "id": "Q41164",
+    "council": "Q16100817",
+    "county_councilor_constituency": "Q50572274"
+  },
+  "광주광역시": {
+    "zh": "光州廣域市",
+    "en": "Gwangju",
+    "id": "Q41283",
+    "council": "Q16094335",
+    "county_councilor_constituency": "Q50572279"
+  },
+  "강원도": {
+    "zh": "江原道",
+    "en": "Gangwon Province",
+    "id": "Q41071",
+    "council": "Q16093243",
+    "county_councilor_constituency": "Q50572283"
+  },
+  "경상남도": {
+    "zh": "慶尚南道",
+    "en": "South Gyeongsang Province",
+    "id": "Q41151",
+    "council": "Q16094835",
+    "county_councilor_constituency": "Q50572291"
+  },
+  "전라남도": {
+    "zh": "全羅南道",
+    "en": "South Jeolla Province",
+    "id": "Q41161",
+    "council": "Q16099669",
+    "county_councilor_constituency": "Q50572290"
+  },
+  "서울특별시": {
+    "zh": "首爾",
+    "en": "Seoul",
+    "id": "Q8684",
+    "council": "Q12601388",
+    "county_councilor_constituency": "Q50572292"
+  },
+  "충청북도": {
+    "zh": "忠清北道",
+    "en": "North Chungcheong Province",
+    "id": "Q41066",
+    "council": "Q16100304",
+    "county_councilor_constituency": "Q50572294"
+  },
+  "전라북도": {
+    "zh": "全羅北道",
+    "en": "North Jeolla Province",
+    "id": "Q41157",
+    "council": "Q21060148",
+    "county_councilor_constituency": "Q50572296"
+  },
+  "평안북도": {
+    "zh": "平安北道",
+    "en": "North Pyeongan Province, Republic of Korea",
+    "id": "Q2949560"
+  },
+  "경기도": {
+    "zh": "京畿道",
+    "en": "Gyeonggi Province",
+    "id": "Q20937",
+    "council": "Q20779829",
+    "county_councilor_constituency": "Q50572285"
+  },
+  "부산광역시": {
+    "zh": "釜山廣域市",
+    "en": "Busan",
+    "id": "Q16520",
+    "council": "Q16096697",
+    "county_councilor_constituency": "Q50572282"
+  },
+  "대구광역시": {
+    "zh": "大邱廣域市",
+    "en": "Daegu",
+    "id": "Q20927",
+    "council": "Q16095349",
+    "county_councilor_constituency": "Q50572287"
+  },
+  "함경남도 (대한민국)": {
+    "zh": "咸鏡南道",
+    "en": "South Hamgyeong Province, Republic of Korea",
+    "id": "Q7567410"
+  },
+  "충청남도": {
+    "zh": "忠清南道",
+    "en": "South Chungcheong Province",
+    "id": "Q41070",
+    "council": "Q16100275",
+    "county_councilor_constituency": "Q50572280"
+  },
+  "인천광역시": {
+    "zh": "仁川廣域市",
+    "en": "Incheon",
+    "id": "Q20934",
+    "council": "Q16099448",
+    "county_councilor_constituency": "Q50572289"
+  },
+  "대전광역시": {
+    "zh": "大田廣域市",
+    "en": "Daejeon",
+    "id": "Q20921",
+    "council": "Q16095510",
+    "county_councilor_constituency": "Q50572297"
+  },
+  "세종특별자치시": {
+    "zh": "世宗特別自治市",
+    "en": "Sejong City",
+    "id": "Q20929",
+    "council": "Q16097908",
+    "county_councilor_constituency": "Q50572273"
+  }
+}
