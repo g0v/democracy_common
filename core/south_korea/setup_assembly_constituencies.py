@@ -8,6 +8,12 @@ import pywikibot
 from common import utils
 
 
+cities = json.load(open('south_korea/data/city_ko_en_zh.json'))
+cities = {x['itemLabel']: {
+    'id': x['item'].split('/')[-1],
+    'en': x['itemLabel_en'],
+    'zh': x['itemLabel_zh']
+} for x in cities}
 people = json.load(open('south_korea/data/assembly_people.json'))
 
 site = pywikibot.Site("ko", "wikipedia")
@@ -24,15 +30,25 @@ for x in people:
 print(len(areas))
 for i, area in enumerate(areas):
     print(i, area)
+    county = area.split()[0]
     try:
-        item_id = utils.get_qnumber(wikiarticle=area, lang="ko")
-        if not item_id:
-            raise
+        match = False
+        for item_id in utils.get_qnumber(wikiarticle=area, lang="ko", limit=None):
+            print(item_id)
+            item = pywikibot.ItemPage(repo, item_id)
+            item.get()
+            if item.labels['ko'] == area and len(item.claims.get('P31', [])) == 1 and 'Q50240982' in [x.target.id for x in item.claims['P31']]:
+                match = True
+                break
+        if not match:
+            create = input('create new entity?(y/n)')
+            if create == 'y':
+                raise
     except:
         labels = {"ko": area}
         item_id = utils.create_item(wikidata_site, labels)
-    item = pywikibot.ItemPage(repo, item_id)
-    item.get()
+        item = pywikibot.ItemPage(repo, item_id)
+        item.get()
     print(area, item.id)
 
     # description
@@ -61,7 +77,7 @@ for i, area in enumerate(areas):
         claim.setTarget(target)
         item.addClaim(claim)
 
-    # 管轄區域
+    # 所在行政區
     try:
         item.claims['P131']
     except:
