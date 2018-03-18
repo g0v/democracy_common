@@ -64,6 +64,8 @@ for x in people:
     areas[x['county']]['seats'] += 1
     if x['type'] == 'region':
         areas[x['county']]['constituencies'][x['constituency']] = x['town']
+    elif x['type'] == 'proportion':
+        areas[x['county']]['constituencies']['%s 비례대표 선거구' % x['constituency']] = x['county']
 for county, v in areas.items():
     print(county)
     county_target = pywikibot.ItemPage(wikidata_site, cities[county]['id'])
@@ -170,15 +172,23 @@ for county, v in areas.items():
             item_id = utils.get_qnumber(wikiarticle=constituency, lang="ko")
             if not item_id:
                 raise
+            item = pywikibot.ItemPage(repo, item_id)
             item.get()
-            if item.labels['ko'] != constituency:
+            if not re.search(constituency, item.labels['ko'):
                 raise
         except:
             labels = {"ko": constituency}
-            item_id = utils.create_item(wikidata_site, labels)
-            item = pywikibot.ItemPage(repo, item_id)
-            item.get()
+            create = input('create new constituency: %s ?(y/n)' % constituency)
+            if create == 'y':
+                item_id = utils.create_item(wikidata_site, labels)
+                item = pywikibot.ItemPage(repo, item_id)
+                item.get()
         print(constituency, item.id)
+
+        # description
+        if not item.descriptions.get('ko'):
+            descriptions = {'ko': '%s 의회 선거구' % county} # 의원 선거구 議會選舉區
+            item.editDescriptions(descriptions, asynchronous=False)
 
         # electoral area
 
@@ -205,15 +215,18 @@ for county, v in areas.items():
             item.claims['P131']
         except:
             claim = pywikibot.Claim(repo, 'P131')
-            page = pywikibot.Page(site, town)
-            try:
-                target = pywikibot.ItemPage.fromPage(page)
-            except:
-                q = utils.get_qnumber(wikiarticle=town, lang="zh-tw")
-                if q:
-                    target = pywikibot.ItemPage(wikidata_site, q)
-                else:
-                    target = county_target
+            if re.search('비례대표', constituency):
+                target = county_target
+            else:
+                page = pywikibot.Page(site, town)
+                try:
+                    target = pywikibot.ItemPage.fromPage(page)
+                except:
+                    q = utils.get_qnumber(wikiarticle=town, lang="zh-tw")
+                    if q:
+                        target = pywikibot.ItemPage(wikidata_site, q)
+                    else:
+                        target = county_target
             claim.setTarget(target)
             item.addClaim(claim)
 
