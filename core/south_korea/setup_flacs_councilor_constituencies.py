@@ -230,4 +230,4 @@ for county, v in areas.items():
             claim.setTarget(target)
             item.addClaim(claim)
 
-json.dump(cities, open(cities_path, 'w'), indent=2, ensure_ascii=False)
+json.dump(cities, open(cities_path, 'w'), indent=2, ensure_ascii=False, sort_keys=True)
