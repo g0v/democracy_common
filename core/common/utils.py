@@ -83,7 +83,7 @@ def get_korea_flacs_councilor_term_ad(county, election_year, get_end_year=False)
         return ''
 
 def get_qnumber(wikiarticle, lang, limit=1):
-    params={
+    params = {
         'action': 'wbsearchentities',
         'search': wikiarticle,
         'language': lang,
@@ -97,7 +97,12 @@ def get_qnumber(wikiarticle, lang, limit=1):
     if resp.get('search') and limit:
         return resp['search'][0]['id']
     else:
-        return [x['id'] for x in resp['search']]
+        r = resp['search']
+        if resp.get('search-continue'):
+            params['continue'] = resp['search-continue']
+            resp_c = requests.get('https://www.wikidata.org/w/api.php', params=params).json()
+            r.extend(resp_c['search'])
+        return [x['id'] for x in r]
 
 def create_item(site, label_dict):
     new_item = pywikibot.ItemPage(site)

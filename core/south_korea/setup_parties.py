@@ -11,6 +11,7 @@ from common import utils
 
 overwrite = True
 people = json.load(open('south_korea/data/assembly_people.json'))
+people.extend(json.load(open('south_korea/data/flacs_councilor.json')))
 party_maps_path = 'south_korea/data/party_maps.json'
 if os.path.isfile(party_maps_path):
     party_maps = json.load(open(party_maps_path))
@@ -30,16 +31,22 @@ for party in parties:
     try:
         page = pywikibot.Page(site, party)
         item = pywikibot.ItemPage.fromPage(page)
-        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463']:
+        item.get()
+        print(item)
+        if 'Q884' not in [x.target.id for x in item.claims['P17']] or [x.target.id for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']]:
             raise
     except:
         match = False
         for item_id in utils.get_qnumber(wikiarticle=party, lang="ko", limit=None):
+            print(item_id)
             item = pywikibot.ItemPage(repo, item_id)
             item.get()
-            if 'Q7278' in [x.target.id for x in item.claims['P31']] and 'Q884' in [x.target.id for x in item.claims['P17']]:
-                match = True
-                break
+            try:
+                if 'Q7278' in [x.target.id for x in item.claims['P31']] and 'Q884' in [x.target.id for x in item.claims['P17']]:
+                    match = True
+                    break
+            except:
+                continue
         if not match:
             raise
     print(item)
