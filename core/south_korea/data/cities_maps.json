@@ -1,6 +1,7 @@
 {
   "강원도": {
     "council": "Q16093243",
+    "councilor_position": "Q50559021",
     "councilor_terms": {
       "9": "Q50798392"
     },
@@ -11,6 +12,7 @@
   },
   "경기도": {
     "council": "Q20779829",
+    "councilor_position": "Q50559168",
     "councilor_terms": {
       "9": "Q50798444"
     },
@@ -21,6 +23,7 @@
   },
   "경상남도": {
     "council": "Q16094835",
+    "councilor_position": "Q50559353",
     "councilor_terms": {
       "10": "Q50798277"
     },
@@ -31,6 +34,7 @@
   },
   "경상북도": {
     "council": "Q16093885",
+    "councilor_position": "Q50559328",
     "councilor_terms": {
       "10": "Q50798239"
     },
@@ -41,6 +45,7 @@
   },
   "광주광역시": {
     "council": "Q16094335",
+    "councilor_position": "Q50277114",
     "councilor_terms": {
       "7": "Q50798291"
     },
@@ -51,6 +56,7 @@
   },
   "대구광역시": {
     "council": "Q16095349",
+    "councilor_position": "Q50559494",
     "councilor_terms": {
       "7": "Q50798372"
     },
@@ -61,6 +67,7 @@
   },
   "대전광역시": {
     "council": "Q16095510",
+    "councilor_position": "Q50559446",
     "councilor_terms": {
       "7": "Q50797896"
     },
@@ -71,6 +78,7 @@
   },
   "부산광역시": {
     "council": "Q16096697",
+    "councilor_position": "Q50559275",
     "councilor_terms": {
       "7": "Q50798199"
     },
@@ -81,6 +89,7 @@
   },
   "서울특별시": {
     "council": "Q12601388",
+    "councilor_position": "Q50257366",
     "councilor_terms": {
       "9": "Q50798355"
     },
@@ -91,6 +100,7 @@
   },
   "세종특별자치시": {
     "council": "Q16097908",
+    "councilor_position": "Q50559074",
     "councilor_terms": {
       "2": "Q50798215"
     },
@@ -101,6 +111,7 @@
   },
   "울산광역시": {
     "council": "Q16099049",
+    "councilor_position": "Q50558615",
     "councilor_terms": {
       "6": "Q50798406"
     },
@@ -111,6 +122,7 @@
   },
   "인천광역시": {
     "council": "Q16099448",
+    "councilor_position": "Q50559472",
     "councilor_terms": {
       "7": "Q50798182"
     },
@@ -121,6 +133,7 @@
   },
   "전라남도": {
     "council": "Q16099669",
+    "councilor_position": "Q50559426",
     "councilor_terms": {
       "10": "Q50798313"
     },
@@ -131,6 +144,7 @@
   },
   "전라북도": {
     "council": "Q21060148",
+    "councilor_position": "Q50559371",
     "councilor_terms": {
       "10": "Q50798429"
     },
@@ -141,6 +155,7 @@
   },
   "제주특별자치도": {
     "council": "Q16100817",
+    "councilor_position": "Q50559384",
     "councilor_terms": {
       "10": "Q50798465"
     },
@@ -151,6 +166,7 @@
   },
   "충청남도": {
     "council": "Q16100275",
+    "councilor_position": "Q50558073",
     "councilor_terms": {
       "10": "Q50798329"
     },
@@ -161,6 +177,7 @@
   },
   "충청북도": {
     "council": "Q16100304",
+    "councilor_position": "Q50559246",
     "councilor_terms": {
       "10": "Q50798260"
     },

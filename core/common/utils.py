@@ -6,7 +6,9 @@ import pywikibot
 def gender_id(text):
     return {
         '男': 'Q6581097',
-        '女': 'Q6581072'
+        '남': 'Q6581097',
+        '女': 'Q6581072',
+        '여': 'Q6581072'
     }[text]
 
 def aborigine_id(text):
@@ -139,7 +141,7 @@ def person_page_item(person):
             b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
             match = True
             # Q4167410 維基媒體消歧義頁, Q13406463 維基媒體列表條目
-            if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463'] or (item.claims.get('P569') and b_target not in [x.target for x in item.claims['P569']]) or (item.claims.get('P569') and b_month == 1 and b_day == 1 and b_year not in [x.target.year for x in item.claims['P569']]) or item.claims.get('P497'):
+            if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or (item.claims.get('P569') and b_target not in [x.target for x in item.claims['P569']]) or (item.claims.get('P569') and b_month == 1 and b_day == 1 and b_year not in [x.target.year for x in item.claims['P569']]) or item.claims.get('P497'):
                 match = False
                 try:
                     item.removeClaims(item.claims['P39'][0])
@@ -168,15 +170,83 @@ def person_page_item(person):
             if len(q_ids) > 1:
                 print(', '.join(q_ids))
                 q_id = input('which one is correct?')
-                item = pywikibot.ItemPage(wikidata_site, q_id)
-                item.get()
-                match = True
-        if item.claims['P31'][0].target.id in ['Q4167410', 'Q13406463'] or not match:
+                if q_id:
+                    item = pywikibot.ItemPage(wikidata_site, q_id)
+                    item.get()
+                    match = True
+        if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or not match:
             raise UnboundLocalError
         print(name, item)
     except UnboundLocalError:
         labels = {"zh": person['name'], "zh-tw": person['name'], "zh-hant": person['name']}
         create = input('create new person?(y/n)')
+        if create == 'y':
+            item_id = create_item(wikidata_site, labels)
+            item = pywikibot.ItemPage(repo, item_id)
+            item.get()
+        else:
+            pass
+    except KeyError:
+        pass
+    return item
+
+def person_page_item_ko(person):
+    site = pywikibot.Site("ko", "wikipedia")
+    wikidata_site = pywikibot.Site("wikidata", "wikidata")
+    repo = site.data_repository()
+    wikidata_repo = wikidata_site.data_repository()
+    if person.get('wikidata_qid'):
+        item = pywikibot.ItemPage(repo, person['wikidata_qid'])
+        item.get()
+        return item
+    q_ids = get_qnumber(wikiarticle=person['name'], lang="ko", limit=None)
+    try:
+        if person.get('birth'):
+            b_year, b_month, b_day = [int(x) for x in person['birth'].split('-')]
+            b_target = pywikibot.WbTime(year=b_year, month=b_month, day=b_day, precision='day')
+            match, possible = False, []
+            for q_id in q_ids:
+                print(q_id)
+                item = pywikibot.ItemPage(wikidata_site, q_id)
+                item.get()
+                # Q4167410 維基媒體消歧義頁, Q13406463 維基媒體列表條目
+                if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or not item.claims.get('P569'):
+                    continue
+                if b_target in [x.target for x in item.claims['P569']]:
+                    match = True
+                    break
+                if b_year in [x.target.year for x in item.claims['P569']]:
+                    possible.append(q_id)
+        if not match:
+            if possible:
+                print(', '.join(possible))
+                q_id = input('birth year matched, which one is correct?')
+                if q_id:
+                    item = pywikibot.ItemPage(wikidata_site, q_id)
+                    item.get()
+                    match = True
+            if len(q_ids) > 1:
+                print(', '.join(q_ids))
+                q_id = input('which one is correct?')
+                if q_id:
+                    item = pywikibot.ItemPage(wikidata_site, q_id)
+                    item.get()
+                    match = True
+            elif len(q_ids) == 1:
+                item = pywikibot.ItemPage(wikidata_site, q_ids[0])
+                item.get()
+                match = True
+        if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or not match:
+            raise UnboundLocalError
+        print(person['name'], item)
+    except UnboundLocalError:
+        labels = {'ko': person['name']}
+        for code in ['zh', 'zh-tw', 'zh-hant']:
+            labels[code] = person['name_zh']
+        if len(q_ids) != 0:
+            create = input('create new person: %s?(y/n)' % person['name'])
+        else:
+            create = 'y'
         if create == 'y':
             item_id = create_item(wikidata_site, labels)
             item = pywikibot.ItemPage(repo, item_id)

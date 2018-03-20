@@ -16,10 +16,6 @@ c = conn.cursor()
 
 overwrite = True
 sleep_second = 5
-refs = {
-    '男': 'Q6581097',
-    '女': 'Q6581072'
-}
 election_year = '2014'
 election_ids = {
     '2014': 'Q15902729'
@@ -121,7 +117,7 @@ for i, r in enumerate(c.fetchall()):
             item.claims['P21']
         except:
             claim = pywikibot.Claim(repo, 'P21')
-            target = pywikibot.ItemPage(repo, refs[person['gender']])
+            target = pywikibot.ItemPage(repo, utils.gender_id[person['gender']])
             claim.setTarget(target)
             item.addClaim(claim)
 
