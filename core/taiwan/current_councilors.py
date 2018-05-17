@@ -83,6 +83,7 @@ for i, r in enumerate(c.fetchall()):
     print(i, person['name'])
     item = utils.person_page_item(person)
     print(item.id)
+    input('...')
 
     # Labels & Aliase
     if not item.labels.get('zh-hant'):
@@ -117,7 +118,7 @@ for i, r in enumerate(c.fetchall()):
             item.claims['P21']
         except:
             claim = pywikibot.Claim(repo, 'P21')
-            target = pywikibot.ItemPage(repo, utils.gender_id[person['gender']])
+            target = pywikibot.ItemPage(repo, utils.gender_id(person['gender']))
             claim.setTarget(target)
             item.addClaim(claim)
 

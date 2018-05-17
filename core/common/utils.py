@@ -116,10 +116,10 @@ def person_page_item(person):
     wikidata_site = pywikibot.Site("wikidata", "wikidata")
     repo = site.data_repository()
     wikidata_repo = wikidata_site.data_repository()
-    if person.get('wikidata_qid'):
-        item = pywikibot.ItemPage(repo, person['wikidata_qid'])
-        item.get()
-        return item
+#   if person.get('wikidata_qid'):
+#       item = pywikibot.ItemPage(repo, person['wikidata_qid'])
+#       item.get()
+#       return item
     for name in person['identifiers']:
         print(name)
         try:
@@ -176,7 +176,10 @@ def person_page_item(person):
                     match = True
         if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or not match:
             raise UnboundLocalError
+        if item.claims.get('P569') and (person['election_year'] < x.target.year for x in item.claims['P569'][0].target.year or person['election_year'] > item.claims['P570'][0].target.year):
+            raise UnboundLocalError
         print(name, item)
+        input('...')
     except UnboundLocalError:
         labels = {"zh": person['name'], "zh-tw": person['name'], "zh-hant": person['name']}
         create = input('create new person?(y/n)')
