@@ -1,0 +1,128 @@
+{
+  "中西區": {
+    "council": "Q5062068",
+    "councilor_position": "Q53913929",
+    "en": "Central and Western District",
+    "id": "Q312485",
+    "zh": "中西區"
+  },
+  "九龍城區": {
+    "council": "Q6435041",
+    "councilor_position": "Q53913696",
+    "en": "Kowloon City District",
+    "id": "Q986415",
+    "zh": "九龍城區"
+  },
+  "元朗區": {
+    "council": "Q8060283",
+    "councilor_position": "Q53914827",
+    "en": "Yuen Long District",
+    "id": "Q871442",
+    "zh": "元朗區"
+  },
+  "北區": {
+    "council": "Q7055133",
+    "councilor_position": "Q53914891",
+    "en": "North District",
+    "id": "Q868032",
+    "zh": "北區"
+  },
+  "南區": {
+    "council": "Q7569875",
+    "councilor_position": "Q53914186",
+    "en": "Southern District",
+    "id": "Q986431",
+    "zh": "南區"
+  },
+  "大埔區": {
+    "council": "Q7675803",
+    "councilor_position": "Q53914098",
+    "en": "Tai Po District",
+    "id": "Q877813",
+    "zh": "大埔區"
+  },
+  "屯門區": {
+    "council": "Q7851385",
+    "councilor_position": "Q53914946",
+    "en": "Tuen Mun District",
+    "id": "Q986383",
+    "zh": "屯門區"
+  },
+  "東區": {
+    "council": "Q5330109",
+    "councilor_position": "Q53914229",
+    "en": "Eastern District",
+    "id": "Q727054",
+    "zh": "東區"
+  },
+  "沙田區": {
+    "council": "Q7459870",
+    "councilor_position": "Q53914481",
+    "en": "Sha Tin District",
+    "id": "Q15019",
+    "zh": "沙田區"
+  },
+  "油尖旺區": {
+    "council": "Q11108949",
+    "councilor_position": "Q53914332",
+    "en": "Yau Tsim Mong District",
+    "id": "Q157669",
+    "zh": "油尖旺區"
+  },
+  "深水埗區": {
+    "council": "Q7487362",
+    "councilor_position": "Q53915061",
+    "en": "Sham Shui Po District",
+    "id": "Q655626",
+    "zh": "深水埗區"
+  },
+  "灣仔區": {
+    "council": "Q7966980",
+    "councilor_position": "Q53914433",
+    "en": "Wan Chai District",
+    "id": "Q986434",
+    "zh": "灣仔區"
+  },
+  "荃灣區": {
+    "council": "Q7849939",
+    "councilor_position": "Q53914050",
+    "en": "Tsuen Wan District",
+    "id": "Q878514",
+    "zh": "荃灣區"
+  },
+  "葵青區": {
+    "council": "Q6449990",
+    "councilor_position": "Q53914373",
+    "en": "Kwai Tsing District",
+    "id": "Q877132",
+    "zh": "葵青區"
+  },
+  "西貢區": {
+    "council": "Q7399798",
+    "councilor_position": "Q53914586",
+    "en": "Sai Kung District",
+    "id": "Q155697",
+    "zh": "西貢區"
+  },
+  "觀塘區": {
+    "council": "Q6450571",
+    "councilor_position": "Q53914657",
+    "en": "Kwun Tong District",
+    "id": "Q875773",
+    "zh": "觀塘區"
+  },
+  "離島區": {
+    "council": "Q6083714",
+    "councilor_position": "Q53914994",
+    "en": "Islands District",
+    "id": "Q752523",
+    "zh": "離島區"
+  },
+  "黃大仙區": {
+    "council": "Q8032028",
+    "councilor_position": "Q53913812",
+    "en": "Wong Tai Sin District",
+    "id": "Q878503",
+    "zh": "黃大仙區"
+  }
+}
