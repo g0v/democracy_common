@@ -135,7 +135,6 @@ for r in wiki_maps:
     r['county_constituencyLabel'] = county_constituency_label
 json.dump(wiki_maps, open(wiki_maps_path, 'w'), indent=2, ensure_ascii=False)
 
-'''
 cec_councilors_constituency_path = 'taiwan/data/councilors_constituencies_2014_with_wikidata_id.json'
 cec_maps = json.load(open(cec_councilors_constituency_path))
 for row in c.fetchall():
@@ -228,7 +227,7 @@ for row in c.fetchall():
         claim.setTarget(target)
         item.addClaim(claim)
 
-    # 管轄區域
+    # 所在行政區
     try:
         item.claims['P131']
     except:
@@ -244,4 +243,3 @@ for row in c.fetchall():
             county_target = pywikibot.ItemPage(wikidata_site, r['city'])
         claim.setTarget(county_target)
         item.addClaim(claim)
-        '''
