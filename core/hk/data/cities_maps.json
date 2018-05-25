@@ -2,6 +2,9 @@
   "中西區": {
     "council": "Q5062068",
     "councilor_position": "Q53913929",
+    "councilor_terms": {
+      "5": "Q54152844"
+    },
     "county_councilor_constituency": "Q54065171",
     "en": "Central and Western District",
     "id": "Q312485",
@@ -10,6 +13,9 @@
   "九龍城區": {
     "council": "Q6435041",
     "councilor_position": "Q53913696",
+    "councilor_terms": {
+      "5": "Q54152822"
+    },
     "county_councilor_constituency": "Q54064971",
     "en": "Kowloon City District",
     "id": "Q986415",
@@ -18,6 +24,9 @@
   "元朗區": {
     "council": "Q8060283",
     "councilor_position": "Q53914827",
+    "councilor_terms": {
+      "5": "Q54152827"
+    },
     "county_councilor_constituency": "Q54064774",
     "en": "Yuen Long District",
     "id": "Q871442",
@@ -26,6 +35,9 @@
   "北區": {
     "council": "Q7055133",
     "councilor_position": "Q53914891",
+    "councilor_terms": {
+      "5": "Q54152820"
+    },
     "county_councilor_constituency": "Q54064842",
     "en": "North District",
     "id": "Q868032",
@@ -34,6 +46,9 @@
   "南區": {
     "council": "Q7569875",
     "councilor_position": "Q53914186",
+    "councilor_terms": {
+      "5": "Q54152839"
+    },
     "county_councilor_constituency": "Q54065003",
     "en": "Southern District",
     "id": "Q986431",
@@ -42,6 +57,9 @@
   "大埔區": {
     "council": "Q7675803",
     "councilor_position": "Q53914098",
+    "councilor_terms": {
+      "5": "Q54152836"
+    },
     "county_councilor_constituency": "Q54065205",
     "en": "Tai Po District",
     "id": "Q877813",
@@ -50,6 +68,9 @@
   "屯門區": {
     "council": "Q7851385",
     "councilor_position": "Q53914946",
+    "councilor_terms": {
+      "5": "Q54152838"
+    },
     "county_councilor_constituency": "Q54064541",
     "en": "Tuen Mun District",
     "id": "Q986383",
@@ -58,6 +79,9 @@
   "東區": {
     "council": "Q5330109",
     "councilor_position": "Q53914229",
+    "councilor_terms": {
+      "5": "Q54152829"
+    },
     "county_councilor_constituency": "Q54065060",
     "en": "Eastern District",
     "id": "Q727054",
@@ -66,6 +90,9 @@
   "沙田區": {
     "council": "Q7459870",
     "councilor_position": "Q53914481",
+    "councilor_terms": {
+      "5": "Q54152834"
+    },
     "county_councilor_constituency": "Q54064913",
     "en": "Sha Tin District",
     "id": "Q15019",
@@ -74,6 +101,9 @@
   "油尖旺區": {
     "council": "Q11108949",
     "councilor_position": "Q53914332",
+    "councilor_terms": {
+      "5": "Q54152832"
+    },
     "county_councilor_constituency": "Q54064884",
     "en": "Yau Tsim Mong District",
     "id": "Q157669",
@@ -82,6 +112,9 @@
   "深水埗區": {
     "council": "Q7487362",
     "councilor_position": "Q53915061",
+    "councilor_terms": {
+      "5": "Q54152831"
+    },
     "county_councilor_constituency": "Q54065094",
     "en": "Sham Shui Po District",
     "id": "Q655626",
@@ -90,6 +123,9 @@
   "灣仔區": {
     "council": "Q7966980",
     "councilor_position": "Q53914433",
+    "councilor_terms": {
+      "5": "Q54152826"
+    },
     "county_councilor_constituency": "Q54064403",
     "en": "Wan Chai District",
     "id": "Q986434",
@@ -98,6 +134,9 @@
   "荃灣區": {
     "council": "Q7849939",
     "councilor_position": "Q53914050",
+    "councilor_terms": {
+      "5": "Q54152830"
+    },
     "county_councilor_constituency": "Q54065277",
     "en": "Tsuen Wan District",
     "id": "Q878514",
@@ -106,6 +145,9 @@
   "葵青區": {
     "council": "Q6449990",
     "councilor_position": "Q53914373",
+    "councilor_terms": {
+      "5": "Q54152823"
+    },
     "county_councilor_constituency": "Q54064941",
     "en": "Kwai Tsing District",
     "id": "Q877132",
@@ -114,6 +156,9 @@
   "西貢區": {
     "council": "Q7399798",
     "councilor_position": "Q53914586",
+    "councilor_terms": {
+      "5": "Q54152825"
+    },
     "county_councilor_constituency": "Q54065131",
     "en": "Sai Kung District",
     "id": "Q155697",
@@ -122,6 +167,9 @@
   "觀塘區": {
     "council": "Q6450571",
     "councilor_position": "Q53914657",
+    "councilor_terms": {
+      "5": "Q54152841"
+    },
     "county_councilor_constituency": "Q54065034",
     "en": "Kwun Tong District",
     "id": "Q875773",
@@ -130,6 +178,9 @@
   "離島區": {
     "council": "Q6083714",
     "councilor_position": "Q53914994",
+    "councilor_terms": {
+      "5": "Q54152837"
+    },
     "county_councilor_constituency": "Q54065243",
     "en": "Islands District",
     "id": "Q752523",
@@ -138,6 +189,9 @@
   "黃大仙區": {
     "council": "Q8032028",
     "councilor_position": "Q53913812",
+    "councilor_terms": {
+      "5": "Q54152813"
+    },
     "county_councilor_constituency": "Q54064812",
     "en": "Wong Tai Sin District",
     "id": "Q878503",

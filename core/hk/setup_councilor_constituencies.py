@@ -161,11 +161,11 @@ for county, v in areas.items():
             labels = {}
             for code in ['zh', 'zh-tw', 'zh-hant']:
                 labels[code] = constituency
-#           create = input('create new constituency: %s ?(y/n)' % constituency)
-#           if create == 'y':
-            item_id = utils.create_item(wikidata_site, labels)
-            item = pywikibot.ItemPage(repo, item_id)
-            item.get()
+            create = input('create new constituency: %s ?(y/n)' % constituency)
+            if create == 'y':
+                item_id = utils.create_item(wikidata_site, labels)
+                item = pywikibot.ItemPage(repo, item_id)
+                item.get()
         print(constituency, item.id)
 
         # electoral area
