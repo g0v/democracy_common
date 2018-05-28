@@ -12,8 +12,6 @@ ad = 5
 year_range = {5: '2016~2019', 4: '2012~2015'}[ad]
 term_start = {5: '2016-01-01', 4: '2012-01-01'}[ad]
 year, month, day = [int(x) for x in term_start.split('-')]
-print(year, month, day)
-input('..')
 term_start_target = pywikibot.WbTime(year=year, month=month, day=day, precision='day')
 # below query could generate hk/data/city_en_zh.json
 '''
