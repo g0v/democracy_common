@@ -40,8 +40,8 @@ class Spider(scrapy.Spider):
 
     def parse_profile(self, response):
         item = {}
-        item['county'] = response.css('.mySection').xpath('text()').re_first(u'(.*?)議會')
-        item['name'] = response.css('.member_name').xpath('text()').re_first(u'(.*?)(議員|女士|先生)')
+        item['county'] = re.sub(u'區區', u'區', response.css('.mySection').xpath('text()').re_first(u'(.*?)議會'))
+        item['name'] = response.css('.member_name').xpath('text()').re_first(u'(.*?)(議員|女士|小姐|先生|博士|太平紳士)')
         term = re.search(u'(\d+)年(\d+)月(\d+)日', response.css('.member_name').xpath('text()').extract_first())
         if term:
             item['term_start'] = '%04d-%02d-%02d' % tuple([int(x) for x in term.groups()])
