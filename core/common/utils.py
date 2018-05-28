@@ -116,10 +116,10 @@ def person_page_item(person):
     wikidata_site = pywikibot.Site("wikidata", "wikidata")
     repo = site.data_repository()
     wikidata_repo = wikidata_site.data_repository()
-#   if person.get('wikidata_qid'):
-#       item = pywikibot.ItemPage(repo, person['wikidata_qid'])
-#       item.get()
-#       return item
+    if person.get('wikidata_qid'):
+        item = pywikibot.ItemPage(repo, person['wikidata_qid'])
+        item.get()
+        return item
     for name in person['identifiers']:
         print(name)
         try:
@@ -250,6 +250,51 @@ def person_page_item_ko(person):
             create = input('create new person: %s?(y/n)' % person['name'])
         else:
             create = 'y'
+        if create == 'y':
+            item_id = create_item(wikidata_site, labels)
+            item = pywikibot.ItemPage(repo, item_id)
+            item.get()
+        else:
+            pass
+    except KeyError:
+        pass
+    return item
+
+def person_page_item_hk(person):
+    site = pywikibot.Site("zh", "wikipedia")
+    wikidata_site = pywikibot.Site("wikidata", "wikidata")
+    repo = site.data_repository()
+    wikidata_repo = wikidata_site.data_repository()
+    if person.get('wikidata_qid'):
+        item = pywikibot.ItemPage(repo, person['wikidata_qid'])
+        item.get()
+        return item
+    q_ids = get_qnumber(wikiarticle=person['name'], lang="zh", limit=None)
+    try:
+        match = False
+        if len(q_ids) > 1:
+            print(', '.join(q_ids))
+            q_id = input('which one is correct?')
+            if q_id:
+                item = pywikibot.ItemPage(wikidata_site, q_id)
+                item.get()
+                match = True
+        elif len(q_ids) == 1:
+            item = pywikibot.ItemPage(wikidata_site, q_ids[0])
+            item.get()
+            match = True
+        else:
+            raise UnboundLocalError
+        print(match)
+        if [x for x in item.claims['P31'] if x.target.id in ['Q4167410', 'Q13406463']] or not match:
+            raise UnboundLocalError
+        if item.claims.get('P569') and (int(person['election_year']) < item.claims['P569'][0].target.year or int(person['election_year']) > item.claims['P570'][0].target.year):
+            raise UnboundLocalError
+        print(person['name'], item)
+        input('...')
+    except UnboundLocalError:
+        labels = {"zh": person['name'], "zh-tw": person['name'], "zh-hant": person['name']}
+        create = input('create new person?(y/n)')
         if create == 'y':
             item_id = create_item(wikidata_site, labels)
             item = pywikibot.ItemPage(repo, item_id)
