@@ -66,6 +66,13 @@ for county, v in cities.items():
     except:
         continue
     county_target = pywikibot.ItemPage(repo, v['id'])
+    # county P194 -> council
+    try:
+        county_target.claims['P194']
+    except:
+        claim = pywikibot.Claim(repo, 'P194')
+        claim.setTarget(council_item)
+        county_target.addClaim(claim)
 
     # councilor position
     if not v.get('councilor_position'):
