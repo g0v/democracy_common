@@ -44,11 +44,36 @@ areas = defaultdict(lambda: {
 for x in people:
     areas[x['county']]['seats'] += 1
     if not x.get('special_constituency'):
-        areas[x['county']]['constituencies']['%s%s區議員選區' % (x['county'], x['town'])] = x['town']
+        areas[x['county']]['constituencies']['%s%s區議員選區' % (x['county'], x['town'])] = 'District Councils Constituency in %s, %s' % (x['town_en'], cities[x['county']]['en'])
     else:
-        areas[x['county']]['constituencies']['%s當然議員' % x['county']] = x['county']
+        areas[x['county']]['constituencies']['%s當然議員' % x['county']] = 'Ex Officio Member in %s' % cities[x['county']]['en']
 for county, v in areas.items():
     print(county)
+
+    #constituencies
+    for constituency, con_en in v['constituencies'].items():
+        try:
+            item_id = utils.get_qnumber(wikiarticle=constituency, lang="zh")
+            if not item_id:
+                raise
+            item = pywikibot.ItemPage(repo, item_id)
+            item.get()
+            if not re.search(constituency, item.labels['zh']):
+                raise
+        except:
+            labels = {'en': con_en}
+            for code in ['zh', 'zh-tw', 'zh-hant']:
+                labels[code] = constituency
+            create = input('create new constituency: %s ?(y/n)' % constituency)
+            if create == 'y':
+                item_id = utils.create_item(wikidata_site, labels)
+                item = pywikibot.ItemPage(repo, item_id)
+                item.get()
+        print(constituency, item.id)
+        labels = {'en': con_en}
+        item.editLabels(labels, asynchronous=False)
+    continue
+
     county_target = pywikibot.ItemPage(wikidata_site, cities[county]['id'])
     # county council legislature
     if not cities[county].get('council'):
@@ -148,7 +173,7 @@ for county, v in areas.items():
         county_constituency_item.addClaim(claim)
 
     #constituencies
-    for constituency, town in v['constituencies'].items():
+    for constituency, con_en in v['constituencies'].items():
         try:
             item_id = utils.get_qnumber(wikiarticle=constituency, lang="zh")
             if not item_id:
@@ -158,7 +183,7 @@ for county, v in areas.items():
             if not re.search(constituency, item.labels['zh']):
                 raise
         except:
-            labels = {}
+            labels = {'en': con_en}
             for code in ['zh', 'zh-tw', 'zh-hant']:
                 labels[code] = constituency
             create = input('create new constituency: %s ?(y/n)' % constituency)
@@ -167,6 +192,8 @@ for county, v in areas.items():
                 item = pywikibot.ItemPage(repo, item_id)
                 item.get()
         print(constituency, item.id)
+        labels = {'en': con_en}
+        item.editLabels(labels, asynchronous=False)
 
         # electoral area
 

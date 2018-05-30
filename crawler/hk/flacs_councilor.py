@@ -50,4 +50,10 @@ class Spider(scrapy.Spider):
         item['special_constituency'] = response.xpath(u'//span[re:test(., "席位$")]/parent::p[1]/text()').re_first(u'當然議員')
         item['party'] = re.sub('-', '', response.xpath(u'//span[re:test(., "^所屬政治聯繫$")]/parent::p[1]/text()').extract()[-1].strip())
         item['email'] = response.xpath(u'//td[re:test(., "電郵地址")]/following-sibling::td/descendant::a/text()').extract_first()
+        yield response.follow(re.sub('tc_chi', 'english', response.url), callback=self.parse_eng, meta={'item': item})
+
+    def parse_eng(self, response):
+        item = response.meta['item']
+        item['town_en'] = re.sub('[-－]', '', response.xpath(u'//span[re:test(., "^Constituency$")]/parent::p[1]/text()').extract()[-1].strip())
+        item['town_en'] = re.sub('\s*\(\S+\)', '', item['town_en'])
         yield item
