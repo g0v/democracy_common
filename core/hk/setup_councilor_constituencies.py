@@ -50,30 +50,6 @@ for x in people:
 for county, v in areas.items():
     print(county)
 
-    #constituencies
-    for constituency, con_en in v['constituencies'].items():
-        try:
-            item_id = utils.get_qnumber(wikiarticle=constituency, lang="zh")
-            if not item_id:
-                raise
-            item = pywikibot.ItemPage(repo, item_id)
-            item.get()
-            if not re.search(constituency, item.labels['zh']):
-                raise
-        except:
-            labels = {'en': con_en}
-            for code in ['zh', 'zh-tw', 'zh-hant']:
-                labels[code] = constituency
-            create = input('create new constituency: %s ?(y/n)' % constituency)
-            if create == 'y':
-                item_id = utils.create_item(wikidata_site, labels)
-                item = pywikibot.ItemPage(repo, item_id)
-                item.get()
-        print(constituency, item.id)
-        labels = {'en': con_en}
-        item.editLabels(labels, asynchronous=False)
-    continue
-
     county_target = pywikibot.ItemPage(wikidata_site, cities[county]['id'])
     # county council legislature
     if not cities[county].get('council'):
