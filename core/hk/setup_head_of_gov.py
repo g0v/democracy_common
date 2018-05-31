@@ -46,6 +46,58 @@ for county, v in cities.items():
     county_target.get()
     council_item = pywikibot.ItemPage(repo, cities[county]['council'])
     council_item.get()
+    # XX區地區管理委員會
+    if not v.get('HoG_org'):
+        org = '%s地區管理委員會' % county
+        try:
+            match = False
+            for q_id in utils.get_qnumber(wikiarticle=org, lang="zh", limit=None):
+                org_item = pywikibot.ItemPage(repo, q_id)
+                org_item.get()
+                if org_item.claims.get('P31') and 'Q21814455 ' in [x.target.id for x in org_item.claims['P31']]:
+                    match = True
+                    break
+            if not match:
+                raise
+        except:
+            org_labels = {'en': '%s District Management Committees' % v['en']}
+            for code in ['zh', 'zh-tw', 'zh-hant']:
+                org_labels[code] = org
+            org_item_id = utils.create_item(wikidata_site, org_labels)
+            org_item = pywikibot.ItemPage(repo, org_item_id)
+            org_item.get()
+            print('new org page created.')
+    else:
+        org_item = pywikibot.ItemPage(repo, v['HoG_org'])
+        org_item.get()
+    print(org_item, org_item.id)
+    cities[county]['HoG_org'] = org_item.id
+
+    try:
+        org_item.claims['P31']
+    except:
+        claim = pywikibot.Claim(repo, 'P31')
+        target = pywikibot.ItemPage(repo, 'Q21814455')
+        claim.setTarget(target)
+        org_item.addClaim(claim)
+
+    # 國家
+    try:
+        org_item.claims['P17']
+    except:
+        claim = pywikibot.Claim(repo, 'P17')
+        target = pywikibot.ItemPage(repo, 'Q148') # Q148 China
+        claim.setTarget(target)
+        org_item.addClaim(claim)
+
+    # 管轄區域
+    try:
+        org_item.claims['P1001']
+    except:
+        claim = pywikibot.Claim(repo, 'P1001')
+        claim.setTarget(county_target)
+        org_item.addClaim(claim)
+
     # HoG position
     if not v.get('HoG_position'):
         position = '%s民政事務專員' % county
@@ -75,7 +127,7 @@ for county, v in cities.items():
 
     # office held by head of government
     try:
-        county_target.qualifiers['P1313']
+        county_target.claims['P1313']
     except:
         claim = pywikibot.Claim(repo, 'P1313')
         claim.setTarget(position_item)
@@ -83,10 +135,10 @@ for county, v in cities.items():
 
     # executive body
     try:
-        county_target.qualifiers['P208']
+        county_target.claims['P208']
     except:
         claim = pywikibot.Claim(repo, 'P208')
-        claim.setTarget(council_item)
+        claim.setTarget(org_item)
         county_target.addClaim(claim)
 
     # part of

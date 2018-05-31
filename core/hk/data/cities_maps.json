@@ -1,5 +1,6 @@
 {
   "中西區": {
+    "HoG_org": "Q54553011",
     "HoG_position": "Q54478776",
     "council": "Q5062068",
     "councilor_position": "Q53913929",
@@ -12,6 +13,7 @@
     "zh": "中西區"
   },
   "九龍城區": {
+    "HoG_org": "Q54553032",
     "HoG_position": "Q54478707",
     "council": "Q6435041",
     "councilor_position": "Q53913696",
@@ -24,6 +26,7 @@
     "zh": "九龍城區"
   },
   "元朗區": {
+    "HoG_org": "Q54553028",
     "HoG_position": "Q54478750",
     "council": "Q8060283",
     "councilor_position": "Q53914827",
@@ -36,6 +39,7 @@
     "zh": "元朗區"
   },
   "北區": {
+    "HoG_org": "Q54553020",
     "HoG_position": "Q54479126",
     "council": "Q7055133",
     "councilor_position": "Q53914891",
@@ -48,6 +52,7 @@
     "zh": "北區"
   },
   "南區": {
+    "HoG_org": "Q54553022",
     "HoG_position": "Q54479040",
     "council": "Q7569875",
     "councilor_position": "Q53914186",
@@ -60,6 +65,7 @@
     "zh": "南區"
   },
   "大埔區": {
+    "HoG_org": "Q54553003",
     "HoG_position": "Q54479094",
     "council": "Q7675803",
     "councilor_position": "Q53914098",
@@ -72,6 +78,7 @@
     "zh": "大埔區"
   },
   "屯門區": {
+    "HoG_org": "Q54553016",
     "HoG_position": "Q54479158",
     "council": "Q7851385",
     "councilor_position": "Q53914946",
@@ -84,6 +91,7 @@
     "zh": "屯門區"
   },
   "東區": {
+    "HoG_org": "Q54553015",
     "HoG_position": "Q54479070",
     "council": "Q5330109",
     "councilor_position": "Q53914229",
@@ -96,6 +104,7 @@
     "zh": "東區"
   },
   "沙田區": {
+    "HoG_org": "Q54553008",
     "HoG_position": "Q54478911",
     "council": "Q7459870",
     "councilor_position": "Q53914481",
@@ -108,6 +117,7 @@
     "zh": "沙田區"
   },
   "油尖旺區": {
+    "HoG_org": "Q54553043",
     "HoG_position": "Q54478722",
     "council": "Q11108949",
     "councilor_position": "Q53914332",
@@ -120,6 +130,7 @@
     "zh": "油尖旺區"
   },
   "深水埗區": {
+    "HoG_org": "Q54553019",
     "HoG_position": "Q54478982",
     "council": "Q7487362",
     "councilor_position": "Q53915061",
@@ -132,6 +143,7 @@
     "zh": "深水埗區"
   },
   "灣仔區": {
+    "HoG_org": "Q54553024",
     "HoG_position": "Q54478875",
     "council": "Q7966980",
     "councilor_position": "Q53914433",
@@ -144,6 +156,7 @@
     "zh": "灣仔區"
   },
   "荃灣區": {
+    "HoG_org": "Q54553006",
     "HoG_position": "Q54478845",
     "council": "Q7849939",
     "councilor_position": "Q53914050",
@@ -156,6 +169,7 @@
     "zh": "荃灣區"
   },
   "葵青區": {
+    "HoG_org": "Q54553039",
     "HoG_position": "Q54479189",
     "council": "Q6449990",
     "councilor_position": "Q53914373",
@@ -168,6 +182,7 @@
     "zh": "葵青區"
   },
   "西貢區": {
+    "HoG_org": "Q54553001",
     "HoG_position": "Q54479009",
     "council": "Q7399798",
     "councilor_position": "Q53914586",
@@ -180,6 +195,7 @@
     "zh": "西貢區"
   },
   "觀塘區": {
+    "HoG_org": "Q54553017",
     "HoG_position": "Q54478949",
     "council": "Q6450571",
     "councilor_position": "Q53914657",
@@ -192,6 +208,7 @@
     "zh": "觀塘區"
   },
   "離島區": {
+    "HoG_org": "Q54553045",
     "HoG_position": "Q54479223",
     "council": "Q6083714",
     "councilor_position": "Q53914994",
@@ -204,6 +221,7 @@
     "zh": "離島區"
   },
   "黃大仙區": {
+    "HoG_org": "Q54553042",
     "HoG_position": "Q54478811",
     "council": "Q8032028",
     "councilor_position": "Q53913812",
