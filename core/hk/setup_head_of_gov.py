@@ -69,7 +69,10 @@ for county, v in cities.items():
             print('new org page created.')
     else:
         org_item = pywikibot.ItemPage(repo, v['HoG_org'])
-        org_item.get()
+        try:
+            org_item.get()
+        except:
+            continue
     print(org_item, org_item.id)
     cities[county]['HoG_org'] = org_item.id
 
@@ -125,6 +128,29 @@ for county, v in cities.items():
     print(position_item, position_item.id)
     cities[county]['HoG_position'] = position_item.id
 
+    # part of
+    try:
+        if org_item.id in [x.target.id for x in position_item.claims['P361']]:
+            continue
+        position_item.removeClaims(position_item.claims['P361'][0])
+        raise
+    except:
+        claim = pywikibot.Claim(repo, 'P361')
+        claim.setTarget(org_item)
+        position_item.addClaim(claim)
+
+    # has part
+    try:
+        if len(council_item.claims['P527']) == 1:
+            continue
+        council_item.removeClaims(council_item.claims['P527'][1])
+        raise
+    except:
+        claim = pywikibot.Claim(repo, 'P527')
+        claim.setTarget(position_item)
+        org_item.addClaim(claim)
+    continue
+
     # office held by head of government
     try:
         county_target.claims['P1313']
@@ -143,20 +169,21 @@ for county, v in cities.items():
 
     # part of
     try:
-        position_item.claims['P361']
+        if org_item.id not in [x.target.id for x in position_item.claims['P361']]:
+            raise
     except:
         claim = pywikibot.Claim(repo, 'P361')
-        claim.setTarget(council_item)
+        claim.setTarget(org_item)
         position_item.addClaim(claim)
 
     # has part
     try:
-        if position_item.id not in [x.target.id for x in item.claims['P527']]:
+        if position_item.id not in [x.target.id for x in org_item.claims['P527']]:
             raise
     except:
         claim = pywikibot.Claim(repo, 'P527')
         claim.setTarget(position_item)
-        council_item.addClaim(claim)
+        org_item.addClaim(claim)
 
     # subclass of
     try:
